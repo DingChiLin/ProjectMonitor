@@ -1,0 +1,29 @@
+{
+  "name": "projectmonitor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DingChiLin/ProjectMonitor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DingChiLin/ProjectMonitor/issues"
+  },
+  "homepage": "https://github.com/DingChiLin/ProjectMonitor#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1",
+    "knex": "^0.20.10",
+    "moment": "^2.24.0",
+    "mysql": "^2.18.1",
+    "nodemon": "^2.0.2"
+  }
+}
