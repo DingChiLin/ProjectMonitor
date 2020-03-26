@@ -13,7 +13,12 @@ const getProgresses = async (req, res) => {
 }
 
 const addProgresses = async (req, res) => {
-    res.send("OK")   
+    console.log(req.body.payload);
+    const payload = JSON.parse(req.body.payload);
+    console.log(payload.action);
+    console.log(payload.repository);
+    console.log(payload.sender);
+    res.send("OK add progress")
 }
 
 module.exports = {
