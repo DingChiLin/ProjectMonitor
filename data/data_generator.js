@@ -4,11 +4,15 @@ const knex = require('../server/models/database');
 const {
     students,
     assignments,
+    status,
+    progresses
 } = require('./data_batch_11');
 
 async function createFakeData() {
     await knex('students').insert(students);
     await knex('assignments').insert(assignments);
+    await knex('status').insert(status);
+    await knex('progresses').insert(progresses);
 }
 
 async function finishConnection() {

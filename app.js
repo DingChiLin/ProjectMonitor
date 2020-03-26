@@ -11,8 +11,9 @@ app.use(express.json());
 app.use(express.static('public'));
 app.use('/scripts/jquery', express.static(__dirname + '/node_modules/jquery/dist/'));
 app.use('/scripts/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
+app.use('/scripts/lodash', express.static(__dirname + '/node_modules/lodash/'));
 
-app.use('/api/v1.0',
+app.use('/api/1.0',
     (req, res, next) => {
         return next();
     },
