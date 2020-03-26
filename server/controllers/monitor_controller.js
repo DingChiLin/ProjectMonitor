@@ -12,6 +12,11 @@ const getProgresses = async (req, res) => {
     res.status(200).json({students, assignments, progresses, status});
 }
 
+const addProgresses = async (req, res) => {
+    res.send("OK")   
+}
+
 module.exports = {
-    getProgresses
+    getProgresses,
+    addProgresses
 }
