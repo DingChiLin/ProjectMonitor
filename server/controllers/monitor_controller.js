@@ -12,13 +12,24 @@ const getProgresses = async (req, res) => {
     res.status(200).json({students, assignments, progresses, status});
 }
 
+function parseGithubPRPayload(payload) {
+    const pullRequest = payload.pull_request;
+    return {
+        repository: payload.repository.name,
+        pr_link: pullRequest.html_url,
+        student: pullRequest.head.user.login,
+        assignmentPart: pullRequest.head.ref,
+        baseBranch: pullRequest.base.ref
+    }
+}
+
 const addProgresses = async (req, res) => {
     console.log(req.body.payload);
     const payload = JSON.parse(req.body.payload);
-    console.log(payload.action);
-    console.log(payload.repository);
-    console.log(payload.sender);
-    res.send("OK add progress")
+    const data = (payload.pull_request) ? parseGithubPRPayload(payload) : null;
+
+    console.log(data);
+    res.json({data: "OK add progress"})
 }
 
 module.exports = {

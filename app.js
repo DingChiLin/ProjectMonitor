@@ -2,7 +2,8 @@ require('dotenv').config();
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = process.env.PORT;
+const {PORT_TEST, PORT, NODE_ENV, API_VERSION} = process.env;
+const port = NODE_ENV == 'test' ? PORT_TEST : PORT;
 
 app.set('json spaces', 2);
 
@@ -13,7 +14,7 @@ app.use('/scripts/jquery', express.static(__dirname + '/node_modules/jquery/dist
 app.use('/scripts/bootstrap', express.static(__dirname + '/node_modules/bootstrap/dist/'));
 app.use('/scripts/lodash', express.static(__dirname + '/node_modules/lodash/'));
 
-app.use('/api/1.0',
+app.use(`/api/${API_VERSION}`,
     (req, res, next) => {
         return next();
     },
@@ -33,3 +34,5 @@ app.get('/', (req, res) => {
 });
 
 app.listen(port, () => console.log(`App listening on port ${port}`));
+
+module.exports = app

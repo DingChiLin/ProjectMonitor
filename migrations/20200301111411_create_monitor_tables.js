@@ -4,6 +4,7 @@ exports.up = function(knex) {
             table.increments('id').primary();
             table.integer('batch');
             table.string('name', 255);
+            table.string('github_name', 255);
             table.string('email');
             table.string('github_link');
             table.string('server');
