@@ -1,13 +1,9 @@
 const rp = require('request-promise');
+const SUCCESS_MESSAGE = "Congrats! You just pass the basic validation. Arthur is on the way." 
 
-async function validate(part, address) {
+async function validate(part, server) {
     const validator = validators[part-1];
-    try {
-        const result = await validator(address);
-        console.log(result);
-    } catch (e) {
-        console.log(e.message);
-    }
+    return await validator(server);
 }
 
 const validatePart1 = async () => {
@@ -22,11 +18,11 @@ const validatePart3 = async () => {
 
 }
 
-const validatePart4 = async (address) => {
+const validatePart4 = async (server) => {
     async function validateAPI(type) {
         const api = `/api/1.0/products/${type}`;
         console.log(api);
-        const productUrl = address + api;
+        const productUrl = server + api;
         const res = await rp({method: 'GET', uri: productUrl, resolveWithFullResponse: true});
         const category = type == 'all' ? null : type;
         try {
@@ -44,7 +40,7 @@ const validatePart4 = async (address) => {
         while(res.next_paging) {
             api = `/api/1.0/products/${type}?paging=${res.next_paging}`
             console.log(api)
-            let productNextPageUrl = address + api;
+            let productNextPageUrl = server + api;
             res = await rp({method: 'GET', uri: productNextPageUrl, resolveWithFullResponse: true});
             const category = type == 'all' ? null : type;
             try {
@@ -56,30 +52,28 @@ const validatePart4 = async (address) => {
         }
     }
 
-    /**
-     * products/all
-     */
-    await validateAPI('all');
-    await validatePaging('all');
+    try {
+        //products/all
+        await validateAPI('all');
+        await validatePaging('all');
 
+        // products/women
+        await validateAPI('women');
+        await validatePaging('women');
+        
+        // products/men
+        await validateAPI('men');
 
-    /**
-     * products/women
-     */
-    await validateAPI('women');
-    await validatePaging('women');
-    
-    /**
-     * products/men
-     */
-    await validateAPI('men');
+        // products/accessories
+        await validateAPI('accessories');
+        
+        // pass validation
+        return {status:1, message:SUCCESS_MESSAGE};
 
-    /**
-     * products/accessories
-     */
-    await validateAPI('accessories');
+    } catch (e) {
+        return {status:2, message:e.message};
+    }
 
-    return true;
 }
 
 function validProductsResponse(res, category) {
@@ -179,6 +173,16 @@ const validators = [
  * For Development
  */
 const part = 4;
-const address = 'http://13.113.12.180'; //'https://arthurstylish.com'
+const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
-validate(part, address);
+function main(){
+    validate(part, server);
+}
+
+if (require.main === module) {
+    main();
+}
+
+module.exports = {
+    validate
+}

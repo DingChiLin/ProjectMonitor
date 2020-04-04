@@ -3,7 +3,8 @@ const pullRequestPayload = {
     "pull_request":{
        "url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/pulls/1",
        "html_url":"https://github.com/DingChiLin/ProjectMonitor/pull/1",
-       "title":"finish week_0_part_1",
+       "issue_url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/issues/1",
+       "title":"finish week_1_part_1",
        "user":{
           "login":"ArthurLinDev",
           "url":"https://api.github.com/users/ArthurLinDev",
@@ -15,8 +16,8 @@ const pullRequestPayload = {
        "closed_at":null,
        "merged_at":null,
        "head":{
-          "label":"ArthurLinDev:week_0_part_1",
-          "ref":"week_0_part_1",
+          "label":"ArthurLinDev:week_1_part_1",
+          "ref":"week_1_part_1",
           "user":{
              "login":"ArthurLinDev",
              "url":"https://api.github.com/users/ArthurLinDev",
@@ -73,6 +74,53 @@ const pullRequestPayload = {
     }
 }
 
+const commentPayload = {
+   "action":"created",
+   "issue":{
+      "url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/issues/1",
+      "repository_url":"https://api.github.com/repos/DingChiLin/ProjectMonitor",
+      "html_url":"https://github.com/DingChiLin/ProjectMonitor/pull/1",
+      "title":"finish week_1_part_1",
+      "user":{
+         "login":"ArthurLinDev",
+         "url":"https://api.github.com/users/ArthurLinDev",
+         "html_url":"https://github.com/ArthurLinDev",
+      },
+      "pull_request":{
+         "url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/pulls/1",
+         "html_url":"https://github.com/DingChiLin/ProjectMonitor/pull/1",
+      },
+      "body":"Let's add this deleted line back."
+   },
+   "comment":{
+      "url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/issues/comments/608256340",
+      "html_url":"https://github.com/DingChiLin/ProjectMonitor/pull/1#issuecomment-608256340",
+      "issue_url":"https://api.github.com/repos/DingChiLin/ProjectMonitor/issues/1",
+      "user":{
+         "login":"ArthurLinDev",
+         "url":"https://api.github.com/users/ArthurLinDev",
+         "html_url":"https://github.com/ArthurLinDev",
+      },
+      "body":"fixed"
+   },
+   "repository":{
+      "name":"ProjectMonitor",
+      "full_name":"DingChiLin/ProjectMonitor",
+      "owner":{
+         "login":"DingChiLin",
+         "url":"https://api.github.com/users/DingChiLin",
+         "html_url":"https://github.com/DingChiLin",
+      },
+      "html_url":"https://github.com/DingChiLin/ProjectMonitor",
+   },
+   "sender":{
+      "login":"ArthurLinDev",
+      "url":"https://api.github.com/users/ArthurLinDev",
+      "html_url":"https://github.com/ArthurLinDev",
+   }
+}
+
 module.exports = {
-    pullRequestPayload
+   commentPayload,
+   pullRequestPayload
 };
