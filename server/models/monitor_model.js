@@ -47,12 +47,10 @@ const createProgress = async (progress) => {
     return progresses;
 }
 
-const updateProgressStatus = async (id, status_id) => {
+const updateProgress = async (id, update) => {
     await knex('progresses')
         .where('id', id)
-        .update({
-            status_id
-        });
+        .update(update);
 }
 
 const getProgresses = async (studentIds) => {
@@ -82,7 +80,7 @@ module.exports = {
     getAssignmentByName,
     getAssignmentById,
     createProgress,
-    updateProgressStatus,
+    updateProgress,
     getProgresses,
     getProgressByPRLink,
     getStatus

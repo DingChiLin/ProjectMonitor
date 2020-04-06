@@ -120,7 +120,55 @@ const commentPayload = {
    }
 }
 
+const mergePayload = {
+   action: 'closed',
+   number: 1,
+   pull_request: {
+      url: 'https://api.github.com/repos/DingChiLin/ProjectMonitor/pulls/1',
+      html_url: 'https://github.com/DingChiLin/ProjectMonitor/pull/1',
+      title: 'finish week_1_part_1',
+      user: {
+         login: 'ArthurLinDev',
+         url: 'https://api.github.com/users/ArthurLinDev',
+         html_url: 'https://github.com/ArthurLinDev',
+      },
+      body: "Let's add this deleted line back.",
+      closed_at: '2020-04-06T05:17:29Z',
+      merged_at: '2020-04-06T05:17:29Z',
+      head: {
+         label: 'ArthurLinDev:week_1_part_1',
+         ref: 'week_1_part_1',
+      },
+      base: {
+         label: 'DingChiLin:arthur_develop',
+         ref: 'arthur_develop',
+      },
+      merged_by: {
+         login: 'DingChiLin',
+         url: 'https://api.github.com/users/DingChiLin',
+         html_url: 'https://github.com/DingChiLin',
+      },
+   },
+   repository: {
+      name: 'ProjectMonitor',
+      full_name: 'DingChiLin/ProjectMonitor',
+      owner: {
+         login: 'DingChiLin',
+         url: 'https://api.github.com/users/DingChiLin',
+         html_url: 'https://github.com/DingChiLin',
+      },
+      html_url: 'https://github.com/DingChiLin/ProjectMonitor',
+      default_branch: 'master'
+   },
+   sender: {
+      login: 'DingChiLin',
+      url: 'https://api.github.com/users/DingChiLin',
+      html_url: 'https://github.com/DingChiLin',
+   }
+}
+
 module.exports = {
    commentPayload,
-   pullRequestPayload
+   pullRequestPayload,
+   mergePayload
 };

@@ -4,6 +4,11 @@ const Monitor = require('../models/monitor_model');
 const Validator = require("../helper/assignment_validator");
 const rp = require("request-promise");
 const {BATCH, GITHUB_TOKEN} = process.env;
+const VALIDATE_TYPES = {
+    PULL_REQUEST: 'pull_request',
+    COMMENT: 'comment',
+    MERGE: 'merge',
+}
 
 const getProgresses = async (req, res) => {
     const {batch} = req.params || BATCH;
@@ -18,10 +23,11 @@ const getProgresses = async (req, res) => {
 
 async function parseGithubPayload(payload, validateType) {
     let detail;
-    if (validateType == 'pull_request') {
+    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.MERGE) {
         detail = payload.pull_request;
         const baseBranch = detail.base.ref.toLowerCase();
         const compareBranch = detail.head.ref.toLowerCase();
+        detail.prLink = payload.pull_request.html_url;
 
         const student = await Monitor.getStudentByGitHubName(BATCH, detail.user.login);
         const studentBranch = student.name.toLowerCase() + '_develop';
@@ -36,15 +42,22 @@ async function parseGithubPayload(payload, validateType) {
         if (!assignment) {
             throw Error(`{error: compare branch name should be **week_n_part_m**, note: please **Close** this pull request and create a new one}`)
         }
+
+        // 3. get progress when the type is merge
+        if (validateType == VALIDATE_TYPES.MERGE) {
+            const progress = await Monitor.getProgressByPRLink(detail.prLink);
+            detail.progress = progress;
+        }
+
         detail.student = student;
         detail.assignment = assignment;
-    } else if (validateType == 'comment') {
+    } else if (validateType == VALIDATE_TYPES.COMMENT) {
         detail = payload.comment;
         const student = await Monitor.getStudentByGitHubName(BATCH, detail.user.login);
-        const prLink = payload.issue.html_url;
-
+        detail.prLink = payload.issue.html_url;
+        
         // 1. find progress
-        const progress = await Monitor.getProgressByPRLink(prLink);
+        const progress = await Monitor.getProgressByPRLink(detail.prLink);
         if (!progress) {
             throw Error(`{error: comment on a wrong pull request, note: please contact Arthur for this problem}`);
         }
@@ -57,8 +70,8 @@ async function parseGithubPayload(payload, validateType) {
     }
 
     return {
-        repository: payload.repository.name,
-        prLink: detail.html_url,
+        prLink: detail.prLink,
+        mergedAt: detail.merged_at,
         student: detail.student,
         assignment: detail.assignment,
         progress: detail.progress,
@@ -66,19 +79,27 @@ async function parseGithubPayload(payload, validateType) {
 }
 
 const addProgresses = async (req, res) => {
+    console.log("Add Progresses FGGGG");
     const payload = JSON.parse(req.body.payload);
+    console.log(payload);
     let uri;
     let validateType;
     if (payload.pull_request) {
+        if (payload.pull_request.merged_at) {
+            validateType = VALIDATE_TYPES.MERGE;
+        } else {
+            validateType = VALIDATE_TYPES.PULL_REQUEST;
+        }
         uri = payload.pull_request.issue_url + '/comments';
-        validateType = 'pull_request';
     } else if (payload.comment && payload.comment.body.toLowerCase().trim() == 'fixed') {
         uri = payload.comment.issue_url + '/comments';
-        validateType = 'comment';
+        validateType = VALIDATE_TYPES.COMMENT;
     } else {
         return
     }
 
+    console.log("validateType:", validateType)
+    
     // 1. parse payload
     let data;
     try {
@@ -87,14 +108,20 @@ const addProgresses = async (req, res) => {
     } catch (e) {
         console.log(e.message);
         await postComment(uri, e.message);
+        return;
     }
 
+    console.log('payload data:', data)
+
     // 2. validate
-    const validResult = await Validator.validate(data.assignment.part, data.student.server);
-    console.log(validResult);
+    let validResult;
+    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
+        validResult = await Validator.validate(data.assignment.part, data.student.server);
+        console.log(validResult);
+    }
 
     // 3. save change to DB
-    if (validateType == 'pull_request') {
+    if (validateType == VALIDATE_TYPES.PULL_REQUEST) {
         const progress = {
             student_id: data.student.id,
             assignment_id: data.assignment.id,
@@ -103,12 +130,17 @@ const addProgresses = async (req, res) => {
             // TODO: how to add url_link for convenience?
         }
         Monitor.createProgress(progress);
-    } else if (validateType == 'comment') {
-        await Monitor.updateProgressStatus(data.progress.id, validResult.status);
+    } else if (validateType == VALIDATE_TYPES.COMMENT) {
+        await Monitor.updateProgress(data.progress.id, {status_id: validResult.status});
+    } else if (validateType == VALIDATE_TYPES.MERGE) {
+        await Monitor.updateProgress(data.progress.id, {status_id:3, finished_at: new Date(data.mergedAt)});
     }
 
     // 4. post result
-    await postComment(uri, validResult.message);
+    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
+        // await postComment(uri, validResult.message);
+        // TODO: should be mocked
+    }
 
     res.json({data: "OK"})
 }

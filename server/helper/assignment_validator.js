@@ -2,6 +2,7 @@ const rp = require('request-promise');
 const SUCCESS_MESSAGE = "Congrats! You just pass the basic validation. Arthur is on the way." 
 
 async function validate(part, server) {
+    console.log(`validate part: ${part} server: ${server}`)
     const validator = validators[part-1];
     return await validator(server);
 }

@@ -7,7 +7,7 @@ const {truncateFakeData, createFakeData} = require('./data_generator');
 chai.use(chaiHttp);
 
 const assert = chai.assert;
-const requester = chai.request(app); // non-login user
+const requester = chai.request(app).keepOpen();
 
 before(async () => {
     if (NODE_ENV !== 'test') {
