@@ -25,18 +25,11 @@ function addAssignmentSelector(assignmentSelector, assignments, latestAssignment
 }
 
 function updatePRLink(dom, studentId, assignmentId) {
-    console.log(dom);
     dom.textContent = "";
     dom.setAttribute('href', "");
     if(assignmentId) {
-        console.log(studentId);
-        console.log(assignmentId)
-        console.log(progressesMap[studentId])
-        console.log(progressesMap[studentId].get(assignmentId));
         const progress = progressesMap[studentId].get(assignmentId);
         const assignment = assignmentMap[assignmentId]
-        console.log(progress);
-        console.log(assignment);
         if (progress && assignment) {
             const url = progress.pr_link;
             const name = assignment.name;
@@ -130,10 +123,12 @@ function main() {
                             tableData.textContent = student.name;
                             break;
                         case 'github':
-                            const githubLink = document.createElement('a');
-                            githubLink.textContent = col;
-                            githubLink.setAttribute('href', student.github_link);
-                            tableData.appendChild(githubLink);
+                            const githubLinkDOM = document.createElement('a');
+                            githubLinkDOM.textContent = col;
+                            githubLinkDOM.setAttribute('target', '_blank');
+                            githubLinkDOM.setAttribute('rel', 'noopener noreferrer');
+                            githubLinkDOM.setAttribute('href', student.github_link);
+                            tableData.appendChild(githubLinkDOM);
                             break;
                         // case 'assignmentType':
                         //     const typeSelector = document.createElement('select');
@@ -171,6 +166,8 @@ function main() {
                             break;
                         case 'pr':
                             const prLinkDOM = document.createElement('a');
+                            prLinkDOM.setAttribute('target', '_blank');
+                            prLinkDOM.setAttribute('rel', 'noopener noreferrer');
                             prLinkDOM.setAttribute('id', `pr_link_${student.id}`);
                             tableData.appendChild(prLinkDOM);
 

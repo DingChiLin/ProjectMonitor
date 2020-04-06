@@ -4,27 +4,38 @@ const SUCCESS_MESSAGE = "Congrats! You just pass the basic validation. Arthur is
 async function validate(part, server) {
     console.log(`validate part: ${part} server: ${server}`)
     const validator = validators[part-1];
-    return await validator(server);
+    const result = await validator(server);
+    console.log(result);
+    return result;
 }
 
-const validatePart1 = async () => {
-
+const validatePart1 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
 }
 
-const validatePart2 = async () => {
-
+const validatePart2 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
 }
 
-const validatePart3 = async () => {
-
+const validatePart3 = async (server) => {
+    const uri = server + '/admin/product.html';
+    const res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
+    console.log(res.statusCode);
+    console.log(res.body.includes('html'));
+    if (res.statusCode == 200 && res.body.includes('html')) {
+        return {status:1, message:SUCCESS_MESSAGE};
+    } else {
+        return {status:2, message:{error: `can't access link: ${uri}`}};
+    }
 }
 
+// Product List API
 const validatePart4 = async (server) => {
     async function validateAPI(type) {
         const api = `/api/1.0/products/${type}`;
         console.log(api);
-        const productUrl = server + api;
-        const res = await rp({method: 'GET', uri: productUrl, resolveWithFullResponse: true});
+        const productUri = server + api;
+        const res = await rp({method: 'GET', uri: productUri, resolveWithFullResponse: true});
         const category = type == 'all' ? null : type;
         try {
             validProductsResponse(res, category);
@@ -74,7 +85,52 @@ const validatePart4 = async (server) => {
     } catch (e) {
         return {status:2, message:e.message};
     }
+}
 
+// Product Search API
+// Product Details API
+const validatePart5 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart6 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart7 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart8 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart9 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart10 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart11 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart12 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart13 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart14 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart15 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
 }
 
 function validProductsResponse(res, category) {
@@ -168,12 +224,23 @@ const validators = [
     validatePart2,
     validatePart3,
     validatePart4,
+    validatePart5,
+    validatePart6,
+    validatePart7,
+    validatePart8,
+    validatePart9,
+    validatePart10,
+    validatePart11,
+    validatePart12,
+    validatePart13,
+    validatePart14,
+    validatePart15,
 ]
 
 /**
  * For Development
  */
-const part = 4;
+const part = 3;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
 function main(){

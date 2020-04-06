@@ -3,32 +3,20 @@ const moment = require('moment');
 const students = [
     {
         batch: 11,
-        name: 'arthur',
+        name: 'lindingchi',
+        github_name: 'DingChiLin',
         email: 'gn01168178@yahoo.com.tw',
         github_link: 'https://github.com/DingChiLin',
         server: 'http://13.113.12.180',
     },
     {
         batch: 11,
-        name: 'arthur2',
-        email: 'gn01168178@yahoo.com.tw',
-        github_link: 'https://github.com/DingChiLin',
+        name: 'arthur',
+        github_name: 'ArthurLinDev',
+        email: 'lindingchi@gmail.com',
+        github_link: 'https://github.com/ArthurLinDev',
         server: 'http://13.113.12.180',
 
-    },
-    {
-        batch: 11,
-        name: 'arthur3',
-        email: 'gn01168178@yahoo.com.tw',
-        github_link: 'https://github.com/DingChiLin',
-        server: 'http://13.113.12.180',
-    },
-    {
-        batch: 11,
-        name: 'arthur4',
-        email: 'gn01168178@yahoo.com.tw',
-        github_link: 'https://github.com/DingChiLin',
-        server: 'http://13.113.12.180',
     }
 ];
 
@@ -114,7 +102,7 @@ const progresses = [
     {
         student_id: 2,
         assignment_id: 4,
-        pr_link: 'https://github.com/DingChiLin/remote-assignments',
+        pr_link: 'https://github.com/DingChiLin/ProjectMonitor/pull/1',
         latest_committed_at: new Date(),
         status_id: 3,
         finished_at: new Date(),

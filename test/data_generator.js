@@ -21,28 +21,10 @@ async function truncateFakeData() {
         console.log('Not in test env');
         return;
     }
-
-    // console.log('truncate fake data');
-    // const setForeignKey = (status) => {
-    //     return query('SET FOREIGN_KEY_CHECKS = ?', status);
-    // };
-
-    // const truncateTable = (table) => {
-    //     return query(`TRUNCATE TABLE ${table}`);
-    // };
-
     await knex('students').truncate();
     await knex('assignments').truncate();
     await knex('status').truncate();
     await knex('progresses').truncate();
-
-    // return setForeignKey(0)
-    //     .then(truncateTable('students'))
-    //     .then(truncateTable('assignments'))
-    //     .then(truncateTable('status'))
-    //     .then(truncateTable('progresses'))
-    //     .then(setForeignKey(1))
-    //     .catch(console.log);
 }
 
 async function finishConnection() {
