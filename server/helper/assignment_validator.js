@@ -1,3 +1,6 @@
+require('dotenv').config();
+const crypto = require('crypto');
+const {FACEBOOK_TOKEN} = process.env;
 const rp = require('request-promise');
 const SUCCESS_MESSAGE = "Congrats! You just pass the basic validation. Arthur is on the way." 
 
@@ -18,13 +21,12 @@ const validatePart2 = async (server) => {
 }
 
 const validatePart3 = async (server) => {
-    const uri = server + '/admin/product.html';
-    const res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
-    if (res.statusCode != 200 || !res.body.includes('html')) {
-        return {status:2, message:{error: `can't access link: ${uri}`}};
+    try {
+        await validHtmlPage(server + '/admin/product.html');
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:{error: e.message}};
     }
-
-    return {status:1, message:SUCCESS_MESSAGE};
 }
 
 // Product List API
@@ -150,13 +152,6 @@ const validatePart5 = async (server) => {
 // campaign admin page & API
 const validatePart6 = async (server) => {
 
-    // Campaign admin page
-    const uri = server + '/admin/campaign.html';
-    const res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
-    if (res.statusCode != 200 || !res.body.includes('html')) {
-        return {status:2, message:{error: `can't access link: ${uri}`}};
-    }
-
     // campaign API
     async function validateCampaignAPI(keyword) {
         const campaignUri = server + '/api/1.0/marketing/campaigns';
@@ -183,6 +178,7 @@ const validatePart6 = async (server) => {
     }
 
     try {
+        await validHtmlPage(server + '/admin/campaign.html');
         await validateCampaignAPI();
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
@@ -191,111 +187,18 @@ const validatePart6 = async (server) => {
 }
 
 const validatePart7 = async (server) => {
-    function validateUserInfo(userInfo) {
-        const expectedUserInfoKeys = new Set(["access_token", "access_expired", "login_at", "user"]);
-        const userInfoKeys = new Set(Object.keys(userInfo));
-        const missingUserInfoKeys = setDiff(expectedUserInfoKeys, userInfoKeys)
-        if (missingUserInfoKeys.length > 0) {
-            throw Error(`response data missing keys: ${missingUserInfoKeys}`);
-        }
-    }
-
-    function validateUser(user) {
-        const expectedUserKeys = new Set(["id", "provider", "name", "email", "picture"]);
-        const userKeys = new Set(Object.keys(user));
-        const missingUserKeys = setDiff(expectedUserKeys, userKeys)
-        if (missingUserKeys.length > 0) {
-            throw Error(`response user missing keys: ${missingUserKeys}`);
-        }
-    }
-
-    // sign up
-    async function validateSignUp() {
-        const signUpBody = {
-            name: "stylishtest1234",
-            email: "stylishtest1234@test.com",
-            password: "stylishtest1234"
-        };
-        const signUpUri = server + '/api/1.0/user/signup';
-        console.log(signUpUri);
-        let signUpRes = await rp({
-            method: 'POST',
-            uri: signUpUri,
-            body: signUpBody,
-            json: true
-        });
-  
-        try {
-            if (!signUpRes.data) {
-                throw Error("response json without key: data");
-            }
-
-            validateUserInfo(signUpRes.data);
-            validateUser(signUpRes.data.user);
-        } catch (e) {
-            throw Error(`{uri: ${signUpUri}, error: ${e.message}}`)
-        }
-    }
-
-    // sign in
-    async function validateSignIn() {
-        const signInBody = {
-            provider: "native",
-            email: "stylishtest1234@test.com",
-            password: "stylishtest1234"
-        }
-        const signInUri = server + '/api/1.0/user/signin';
-        console.log(signInUri);
-        let signInRes = await rp({
-            method: 'POST',
-            uri: signInUri,
-            body: signInBody,
-            json: true
-        });
-  
-        try {
-            if (!signInRes.data) {
-                throw Error("response json without key: data");
-            }
-
-            validateUserInfo(signInRes.data);
-            validateUser(signInRes.data.user);
-
-            return signInRes.data.access_token;
-        } catch (e) {
-            throw Error(`{uri: ${signInUri}, error: ${e.message}}`)
-        }
-    }
-
-    // user profile
-    async function validateUserProfile(accessToken) {
-        const userProfileHeaders = {
-            'User-Agent': 'Request-Promise',
-            Authorization: `Bearer ${accessToken}`
-        }
-        const userProfileUri = server + '/api/1.0/user/profile';
-        console.log(userProfileUri);
-        let userProfileRes = await rp({
-            method: 'GET',
-            uri: userProfileUri,
-            headers: userProfileHeaders,
-            json: true
-        });
-  
-        try {
-            if (!userProfileRes.data) {
-                throw Error("response json without key: data");
-            }
-            
-            validateUser(userProfileRes.data);
-        } catch (e) {
-            throw Error(`{uri: ${userProfileUri}, error: ${e.message}}`)
-        }
-    }
-
     try {
-        await validateSignUp();
-        const accessToken = await validateSignIn();
+        const email = "stylishtest_" + crypto.randomBytes(18).toString('hex').substr(0, 8);
+        await validateSignUp({
+            name: 'stylishtest',
+            email: `${email}@test.com`,
+            password: 'stylishtest1234'
+        });
+        const accessToken = await validateSignIn({
+            provider: "native",
+            email: `${email}@test.com`,     
+            password: 'stylishtest1234'
+        });
         await validateUserProfile(accessToken);
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
@@ -304,27 +207,63 @@ const validatePart7 = async (server) => {
 }
 
 const validatePart8 = async (server) => {
-    return {status:1, message:SUCCESS_MESSAGE};
+    try {
+        const accessToken = await validateSignIn({
+            provider: "facebook",
+            access_token: FACEBOOK_TOKEN
+        });
+        await validateUserProfile(accessToken);
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:e.message};
+    };
 }
 
 const validatePart9 = async (server) => {
-    return {status:1, message:SUCCESS_MESSAGE};
+    try {
+        await validHtmlPage(server + '/admin/checkout.html');
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:{error: e.message}};
+    }
 }
 
 const validatePart10 = async (server) => {
     return {status:1, message:SUCCESS_MESSAGE};
+    // TODO: actually generate a prime to test ?
 }
 
 const validatePart11 = async (server) => {
-    return {status:1, message:SUCCESS_MESSAGE};
+    try {
+        await validHtmlPage(server + '/index.html');
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:{error: e.message}};
+    }
 }
 
 const validatePart12 = async (server) => {
-    return {status:1, message:SUCCESS_MESSAGE};
+    try {
+        const api = `/api/1.0/products/all`;
+        const productAllUri = server + api;
+        const res = await rp({uri: productAllUri, json: true});
+        for (product of res.data) {
+            await validHtmlPage(server + '/product.html?id=' + product.id);
+        }
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:{error: e.message}};
+    }
 }
 
 const validatePart13 = async (server) => {
-    return {status:1, message:SUCCESS_MESSAGE};
+    try {
+        await validHtmlPage(server + '/thankyou.html');
+        await validHtmlPage(server + '/profile.html');
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:{error: e.message}};
+    };
 }
 
 const validatePart14 = async (server) => {
@@ -333,6 +272,14 @@ const validatePart14 = async (server) => {
 
 const validatePart15 = async (server) => {
     return {status:1, message:SUCCESS_MESSAGE};
+}
+
+async function validHtmlPage(uri) {
+    console.log(uri);
+    const res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
+    if (res.statusCode != 200 || !res.body.includes('html')) {
+        throw Error(`can't access link: ${uri}`);
+    }
 }
 
 function validProductsResponse(res, category, keyword) {
@@ -424,6 +371,98 @@ function setDiff(set1, set2) {
     return [...set1].filter(x => !set2.has(x));
 }
 
+function validateUserInfo(userInfo) {
+    const expectedUserInfoKeys = new Set(["access_token", "access_expired", "login_at", "user"]);
+    const userInfoKeys = new Set(Object.keys(userInfo));
+    const missingUserInfoKeys = setDiff(expectedUserInfoKeys, userInfoKeys)
+    if (missingUserInfoKeys.length > 0) {
+        throw Error(`response data missing keys: ${missingUserInfoKeys}`);
+    }
+}
+
+function validateUser(user) {
+    const expectedUserKeys = new Set(["id", "provider", "name", "email", "picture"]);
+    const userKeys = new Set(Object.keys(user));
+    const missingUserKeys = setDiff(expectedUserKeys, userKeys)
+    if (missingUserKeys.length > 0) {
+        throw Error(`response user missing keys: ${missingUserKeys}`);
+    }
+}
+
+// sign up
+async function validateSignUp(body) {
+    const uri = server + '/api/1.0/user/signup';
+    console.log(uri);
+    let res = await rp({
+        method: 'POST',
+        uri,
+        body,
+        json: true
+    });
+
+    try {
+        if (!res.data) {
+            throw Error("response json without key: data");
+        }
+
+        validateUserInfo(res.data);
+        validateUser(res.data.user);
+    } catch (e) {
+        throw Error(`{uri: ${uri}, error: ${e.message}}`)
+    }
+}
+
+// sign in
+async function validateSignIn(body) {
+    const uri = server + '/api/1.0/user/signin';
+    console.log(uri);
+    let res = await rp({
+        method: 'POST',
+        uri,
+        body,
+        json: true
+    });
+
+    try {
+        if (!res.data) {
+            throw Error("response json without key: data");
+        }
+
+        validateUserInfo(res.data);
+        validateUser(res.data.user);
+
+        return res.data.access_token;
+    } catch (e) {
+        throw Error(`{uri: ${uri}, error: ${e.message}}`)
+    }
+}
+
+// user profile
+async function validateUserProfile(accessToken) {
+    const headers = {
+        'User-Agent': 'Request-Promise',
+        Authorization: `Bearer ${accessToken}`
+    }
+    const uri = server + '/api/1.0/user/profile';
+    console.log(uri);
+    let res = await rp({
+        method: 'GET',
+        uri,
+        headers,
+        json: true
+    });
+
+    try {
+        if (!res.data) {
+            throw Error("response json without key: data");
+        }
+        
+        validateUser(res.data);
+    } catch (e) {
+        throw Error(`{uri: ${uri}, error: ${e.message}}`)
+    }
+}
+
 const validators = [
     validatePart1,
     validatePart2,
@@ -445,7 +484,7 @@ const validators = [
 /**
  * For Development
  */
-const part = 7;
+const part = 12;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
 function main(){
