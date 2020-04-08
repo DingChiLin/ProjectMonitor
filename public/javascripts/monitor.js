@@ -6,10 +6,11 @@ const columns = {
     // assignmentType: 'Assignment Type',
     part: 'Part',
     pr: 'PR',
+    page: 'Page',
     status: 'Status'
 }
 
-let students, assignments, assignmentMap, progresses, progressesMap, status, statusMap;
+let students, studentMap, assignments, assignmentMap, progresses, progressesMap, status, statusMap;
 
 function addAssignmentSelector(assignmentSelector, assignments, latestAssignmentId) {
     assignmentSelector.options.length = 0;
@@ -34,6 +35,24 @@ function updatePRLink(dom, studentId, assignmentId) {
             const url = progress.pr_link;
             const name = assignment.name;
             dom.textContent = name;
+            dom.setAttribute('href', url)
+        }
+    }
+}
+
+function updatePageLink(dom, studentId, assignmentId) {
+    dom.textContent = "";
+    dom.setAttribute('href', "");
+    if(assignmentId) {
+        const student = studentMap[studentId];
+        const assignment = assignmentMap[assignmentId];
+        console.log(studentId)
+        console.log(assignmentId);
+        console.log(assignment)
+        if (student && assignment) {
+            const route = assignment.route ? assignment.route : '';
+            const url = student.server + route;
+            dom.textContent = 'page';
             dom.setAttribute('href', url)
         }
     }
@@ -83,6 +102,11 @@ function main() {
             assignments = data.assignments;
             progresses = data.progresses;
             status = data.status;
+
+            studentMap = students.reduce((obj, student) => {
+                obj[student.id] = student;
+                return obj;
+            }, {});
 
             assignmentMap = assignments.reduce((obj, assignment) => {
                 obj[assignment.id] = assignment;
@@ -154,9 +178,11 @@ function main() {
                             partSelector.addEventListener("change", (e) => {
                                 const studentId = student.id;
                                 const assignmentId = parseInt(e.target.value);
-                                const assignmentName = e.target.options[e.target.selectedIndex].textContent;
+                                // const assignmentName = e.target.options[e.target.selectedIndex].textContent;
                                 const prLinkDom = $(`#pr_link_${studentId}`)[0];
+                                const pageLinkDom = $(`#page_link_${studentId}`)[0];
                                 updatePRLink(prLinkDom, studentId, assignmentId);
+                                updatePageLink(pageLinkDom, studentId, assignmentId);
                                 const statusDOM = $(`#status_${studentId}`)[0];
                                 updateStatus(statusDOM, studentId, assignmentId);
                             })
@@ -172,6 +198,15 @@ function main() {
                             tableData.appendChild(prLinkDOM);
 
                             updatePRLink(prLinkDOM, student.id, latestAssignmentId);
+                            break;
+                        case 'page':
+                            const pageLinkDOM = document.createElement('a');
+                            pageLinkDOM.setAttribute('target', '_blank');
+                            pageLinkDOM.setAttribute('rel', 'noopener noreferrer');
+                            pageLinkDOM.setAttribute('id', `page_link_${student.id}`);
+                            tableData.appendChild(pageLinkDOM);
+
+                            updatePageLink(pageLinkDOM, student.id, latestAssignmentId);
                             break;
                         case 'status':
                             const statusDOM = document.createElement('p');

@@ -34,32 +34,76 @@ const assignments = [
     {
         batch: 11,
         part: 3,
-        name: 'week_0_part_3'
+        name: 'week_0_part_3',
+        route: '/admin/product.html'
     },
     {
         batch: 11,
         part: 4,
-        name: 'week_1_part_1'
+        name: 'week_1_part_1',
+        route: '/api/1.0/products/all'
     },
     {
         batch: 11,
         part: 5,
-        name: 'week_1_part_2'
+        name: 'week_1_part_2',
+        route: encodeURI('/api/1.0/products/search?keyword=洋裝')
     },
     {
         batch: 11,
         part: 6,
-        name: 'week_1_part_3'
+        name: 'week_1_part_3',
+        route: '/admin/campaign.html'
     },
     {
         batch: 11,
         part: 7,
-        name: 'week_1_part_4'
+        name: 'week_1_part_4',
     },
     {
         batch: 11,
         part: 8,
         name: 'week_1_part_5'
+    },
+    {
+        batch: 11,
+        part: 9,
+        name: 'week_2_part_1',
+        route: '/admin/checkout.html'
+    },
+    {
+        batch: 11,
+        part: 10,
+        name: 'week_2_part_2',
+        route: '/admin/checkout.html'
+    },
+    {
+        batch: 11,
+        part: 11,
+        name: 'week_2_part_3',
+        route: '/index.html'
+    },
+    {
+        batch: 11,
+        part: 12,
+        name: 'week_2_part_4',
+        route: '/product.html?id=1'
+    },
+    {
+        batch: 11,
+        part: 13,
+        name: 'week_2_part_5',
+        route: '/profile.html'
+    },
+    {
+        batch: 11,
+        part: 14,
+        name: 'week_3_part_1'
+    },
+    {
+        batch: 11,
+        part: 15,
+        name: 'week_3_part_2'
     }
 ]
 
