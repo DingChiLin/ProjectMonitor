@@ -253,14 +253,7 @@ const progresses = [
         latest_committed_at: new Date(),
         status_id: 3,
         finished_at: new Date(),
-    },
-    {
-        student_id: 3,
-        assignment_id: 4,
-        pr_link: 'https://github.com/DingChiLin/remote-assignments/tree/master/Week-1/Assignment-2',
-        latest_committed_at: new Date(),
-        status_id: 2,
-    },
+    }
 ]
 
 module.exports = {
