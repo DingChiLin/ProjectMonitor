@@ -22,12 +22,11 @@ const getProgresses = async (req, res) => {
 }
 
 const addProgresses = async (req, res) => {
-    console.log("Add Progresses");
+    console.log("============= ADD OR UPDATE PROGRESSES =============");
 
     let payload;
     if (req.body) {
         payload	= req.body;
-        console.log(payload);
     } else {
         console.log('can not find payload');
         res.send('can not find payload');
@@ -58,15 +57,14 @@ const addProgresses = async (req, res) => {
     let data;
     try {
         data = await parseGithubPayload(payload, validateType);
-        console.log(data);
+        console.log('payload data:', data)
     } catch (e) {
         await postComment(uri, e.message);
         console.log('parse payload failed:', e.message);
+        console.log('payload:', payload);
         res.send(e.message);
         return;
     }
-
-    console.log('payload data:', data)
 
     // 2. validate
     let validResult;
