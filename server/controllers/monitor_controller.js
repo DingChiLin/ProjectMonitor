@@ -22,9 +22,18 @@ const getProgresses = async (req, res) => {
 }
 
 const addProgresses = async (req, res) => {
-    console.log("Add Progresses FGGGG");
-    const payload = JSON.parse(req.body.payload);
-    console.log(payload);
+    console.log("Add Progresses");
+
+    let payload;
+    if (req.body) {
+        payload	= req.body;
+        console.log(payload);
+    } else {
+        console.log('can not find payload');
+        res.send('can not find payload');
+        return;
+    }
+
     let uri;
     let validateType;
     if (payload.pull_request) {
@@ -38,7 +47,9 @@ const addProgresses = async (req, res) => {
         uri = payload.comment.issue_url + '/comments';
         validateType = VALIDATE_TYPES.COMMENT;
     } else {
-        return
+        console.log("payload without valid type");
+        res.send("payload without valid type" );
+        return;
     }
 
     console.log("validateType:", validateType)
@@ -49,8 +60,9 @@ const addProgresses = async (req, res) => {
         data = await parseGithubPayload(payload, validateType);
         console.log(data);
     } catch (e) {
-        console.log(e.message);
         await postComment(uri, e.message);
+        console.log('parse payload failed:', e.message);
+        res.send(e.message);
         return;
     }
 
@@ -58,9 +70,14 @@ const addProgresses = async (req, res) => {
 
     // 2. validate
     let validResult;
-    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
-        validResult = await Validator.validate(data.assignment.part, data.student.server);
-        console.log(validResult);
+    try {
+        if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
+            validResult = await Validator.validate(data.assignment.part, data.student.server);
+            console.log(validResult);
+        }
+    } catch (e) {
+        console.log('validate failed,:', e.message);
+        res.send('validate failed');
     }
 
     // 3. save change to DB
@@ -69,8 +86,7 @@ const addProgresses = async (req, res) => {
             student_id: data.student.id,
             assignment_id: data.assignment.id,
             pr_link: data.prLink,
-            status_id: validResult.status, //checked
-            // TODO: how to add url_link for convenience?
+            status_id: validResult.status,
         }
         Monitor.createProgress(progress);
     } else if (validateType == VALIDATE_TYPES.COMMENT) {
@@ -81,8 +97,7 @@ const addProgresses = async (req, res) => {
 
     // 4. post result
     if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
-        // await postComment(uri, validResult.message);
-        // TODO: should be mocked
+        await postComment(uri, validResult.message);
     }
 
     res.json({data: "OK"})

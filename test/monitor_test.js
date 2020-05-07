@@ -3,11 +3,9 @@ const {assert, requester} = require('./set_up');
 const Monitor = require('../server/models/monitor_model');
 const {pullRequestPayload, commentPayload, mergePayload} = require('./payload');
 
-// TODO: how to test? should mock rp result
-
 describe('monitor', async () => {
     it('get pull request and pass the validation', async () => {
-        const data = {payload: JSON.stringify(pullRequestPayload)};
+        const data = pullRequestPayload;
 
         const res = await requester
             .post('/api/1.0/monitor/progresses')
@@ -27,7 +25,7 @@ describe('monitor', async () => {
         
         assert.equal(errorProgress.status_id, 2);
 
-        const data = {payload: JSON.stringify(commentPayload)};
+        const data = commentPayload;
 
         const res = await requester
             .post('/api/1.0/monitor/progresses')
@@ -41,7 +39,7 @@ describe('monitor', async () => {
     })
 
     it('get merge', async () => {
-        const data = {payload: JSON.stringify(mergePayload)};
+        const data = mergePayload;
 
         const res = await requester
             .post('/api/1.0/monitor/progresses')
