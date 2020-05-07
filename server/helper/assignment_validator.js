@@ -206,6 +206,7 @@ const validatePart7 = async (server) => {
     }
 }
 
+// generate FB token: https://developers.facebook.com/tools/explorer/
 const validatePart8 = async (server) => {
     try {
         const accessToken = await validateSignIn({
