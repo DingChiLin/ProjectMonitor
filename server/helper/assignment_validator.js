@@ -8,7 +8,6 @@ async function validate(part, server) {
     console.log(`validate part: ${part} server: ${server}`)
     const validator = validators[part-1];
     const result = await validator(server);
-    console.log(result);
     return result;
 }
 
