@@ -16,7 +16,7 @@ describe('monitor', async () => {
         const progress = await Monitor.getProgressByPRLink(pullRequestPayload.pull_request.html_url);
         assert.equal(progress.student_id, 2);
         assert.equal(progress.status_id, 1);
-    })
+    }).timeout(5000);
 
     it('get comment with body "fixed" and pass the validation', async () => {
         // change status to 2
@@ -36,7 +36,7 @@ describe('monitor', async () => {
         // status should be changed back to 1
         const progress = await Monitor.getProgressByPRLink(commentPayload.issue.html_url);
         assert.equal(progress.status_id, 1);
-    })
+    }).timeout(5000);
 
     it('get merge', async () => {
         const data = mergePayload;
@@ -50,5 +50,5 @@ describe('monitor', async () => {
 
         const progress = await Monitor.getProgressByPRLink(mergePayload.pull_request.html_url);
         assert.equal(progress.status_id, 3);
-    })
+    }).timeout(5000);
 })
