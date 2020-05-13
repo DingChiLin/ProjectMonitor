@@ -2,7 +2,7 @@ require('dotenv').config();
 const crypto = require('crypto');
 const {FACEBOOK_TOKEN} = process.env;
 const rp = require('request-promise');
-const SUCCESS_MESSAGE = "Congrats! You just pass the basic validation. Arthur is on the way." 
+const SUCCESS_MESSAGE = "Congrats! You just passed the basic validation. Arthur is on the way." 
 
 async function validate(part, server) {
     console.log(`validate part: ${part} server: ${server}`)
