@@ -10,12 +10,33 @@ const Monitor = {
     },
 
     init: async function(batchId) { // need to await it initialize.
+        const self = this;
+
+        this.batchId = batchId
+        await this.getLatestProgress(batchId);
+
+        $("#current_assignment_btn").click(function() {
+            for (student of self.students) {
+                self.changeCurrentAssignment(student.id, self.currentAssignmentId);
+            }
+        });
+
+        $("#latest_progress_btn").click(async function() {
+            await self.getLatestProgress(self.batchId);
+            for (student of self.students) {
+                latestAssignmentId = Array.from(self.progressesMap[student.id].keys()).pop();
+                self.changeCurrentAssignment(student.id, latestAssignmentId);
+            }
+        });
+    },
+
+    getLatestProgress: async function(batchId) {
         const data = await Promise.resolve($.ajax('../api/1.0/monitor/progresses/' + batchId));
         this.students = data.students;
         this.assignments = data.assignments;
         this.progresses = data.progresses;
         this.status = data.status;
-        this.current_assignment_id = data.current_assignment_id;
+        this.currentAssignmentId = data.currentAssignmentId;
 
         this.studentMap = this.students.reduce((obj, student) => {
             obj[student.id] = student;
@@ -41,29 +62,14 @@ const Monitor = {
             obj[stat.id] = stat.name;
             return obj;
         }, {});
-
-        let self = this;
-        $("#current_assignment_btn").click(function() {
-            // console.log(self.students)
-            // self.updateCurrentAssignment()
-            // console.log( "Handler for .click() called." );
-
-            for (student of self.students) {
-                self.changeCurrentAssignment(student.id, self.current_assignment_id);
-            }
-
-            for(assignmentSelector of $(`.partSelector`)) {
-                assignmentSelector.value = 5;
-            }
-        });
     },
 
     changeCurrentAssignment: function(studentId, assignmentId) {
-        console.log(studentId)
-        console.log(assignmentId);
+        const partSelectorDom = $(`#partSelector_${studentId}`)[0];
         const statusDOM = $(`#status_${studentId}`)[0];
         const prLinkDom = $(`#pr_link_${studentId}`)[0];
         const pageLinkDom = $(`#page_link_${studentId}`)[0];
+        partSelectorDom.value = assignmentId;
         this.updatePRLink(prLinkDom, studentId, assignmentId);
         this.updatePageLink(pageLinkDom, studentId, assignmentId);
         this.updateStatus(statusDOM, studentId, assignmentId);
@@ -142,12 +148,19 @@ const Monitor = {
         for(header of Object.values(this.columns)) {
             let tableHeader = document.createElement('th');
             tableHeader.setAttribute('scope', 'row');
+            if (header == '#') {
+                tableHeader.setAttribute('width', '4%');
+            } else {
+                tableHeader.setAttribute('width', '16%');
+            }
             tableHeader.textContent = header;
             monitorTableHeader.appendChild(tableHeader);
         }
 
         for (let student of this.students) {
             let tableRow = document.createElement('tr');
+            tableRow.setAttribute('width', '20%');
+
             let latestAssignmentId;
             if (this.progressesMap[student.id]) {
                 latestAssignmentId = Array.from(this.progressesMap[student.id].keys()).pop();
@@ -172,18 +185,12 @@ const Monitor = {
                         break;
                     case 'part':
                         const partSelector = document.createElement('select');
-                        partSelector.setAttribute('class', "custom-select custom-select-sm partSelector");
-
+                        partSelector.setAttribute('class', "custom-select custom-select-sm");
+                        partSelector.setAttribute('id', `partSelector_${student.id}`);
                         partSelector.addEventListener("change", (e) => {
                             const studentId = student.id;
                             const assignmentId = parseInt(e.target.value);
-                            // const assignmentName = e.target.options[e.target.selectedIndex].textContent;
-                            const prLinkDom = $(`#pr_link_${studentId}`)[0];
-                            const pageLinkDom = $(`#page_link_${studentId}`)[0];
-                            this.updatePRLink(prLinkDom, studentId, assignmentId);
-                            this.updatePageLink(pageLinkDom, studentId, assignmentId);
-                            const statusDOM = $(`#status_${studentId}`)[0];
-                            this.updateStatus(statusDOM, studentId, assignmentId);
+                            this.changeCurrentAssignment(studentId, assignmentId)
                         })
 
                         this.addAssignmentSelector(partSelector, latestAssignmentId);

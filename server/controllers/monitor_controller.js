@@ -1,5 +1,5 @@
 require('dotenv').config();
-const moment = require('moment');
+const util = require('../helper/util');
 const Monitor = require('../models/monitor_model');
 const Validator = require("../helper/assignment_validator");
 const rp = require("request-promise");
@@ -9,7 +9,6 @@ const VALIDATE_TYPES = {
     COMMENT: 'comment',
     MERGE: 'merge',
 }
-let current_assignment_id = 1;
 
 const getProgresses = async (req, res) => {
     const {batch} = req.params || BATCH;
@@ -18,13 +17,9 @@ const getProgresses = async (req, res) => {
     const assignments = await Monitor.getAssignments(batch);
     const progresses = await Monitor.getProgresses(students.map(s => s.id));
     const status = await Monitor.getStatus();
+    const currentAssignmentId = util.getCurrentAssignmentId(assignments);
 
-    res.status(200).json({students, assignments, progresses, status, current_assignment_id});
-}
-
-const updateCurrentAssignment = async (req, res) => {
-    const {assignment_id} = req.params.assignment_id;
-    current_assignment_id = assignment_id;
+    res.status(200).json({students, assignments, progresses, status, currentAssignmentId});
 }
 
 const addProgresses = async (req, res) => {
@@ -177,5 +172,4 @@ async function postComment(uri, content) {
 module.exports = {
     getProgresses,
     addProgresses,
-    updateCurrentAssignment,
 }

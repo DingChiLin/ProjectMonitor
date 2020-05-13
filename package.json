@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "migrate": "knex migrate:down && knex migrate:up",
-    "migrate_test": "NODE_ENV=test knex migrate:down && NODE_ENV=test knex migrate:up",
+    "migrate": "knex migrate:up",
+    "migrate_test": "NODE_ENV=test knex migrate:down && NODE_ENV=test knex migrate:latest",
     "test": "NODE_ENV=test mocha --exit"
   },
   "repository": {
@@ -30,7 +30,7 @@
     "lodash": "^4.17.15",
     "minimist": ">=1.2.2",
     "mocha": "^7.1.1",
-    "moment": "^2.24.0",
+    "moment-timezone": "^0.5.28",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.2",
     "request": "^2.88.2",
