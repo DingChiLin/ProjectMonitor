@@ -9,6 +9,7 @@ const VALIDATE_TYPES = {
     COMMENT: 'comment',
     MERGE: 'merge',
 }
+let current_assignment_id = 1;
 
 const getProgresses = async (req, res) => {
     const {batch} = req.params || BATCH;
@@ -18,7 +19,12 @@ const getProgresses = async (req, res) => {
     const progresses = await Monitor.getProgresses(students.map(s => s.id));
     const status = await Monitor.getStatus();
 
-    res.status(200).json({students, assignments, progresses, status});
+    res.status(200).json({students, assignments, progresses, status, current_assignment_id});
+}
+
+const updateCurrentAssignment = async (req, res) => {
+    const {assignment_id} = req.params.assignment_id;
+    current_assignment_id = assignment_id;
 }
 
 const addProgresses = async (req, res) => {
@@ -170,5 +176,6 @@ async function postComment(uri, content) {
 
 module.exports = {
     getProgresses,
-    addProgresses
+    addProgresses,
+    updateCurrentAssignment,
 }

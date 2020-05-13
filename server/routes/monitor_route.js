@@ -2,7 +2,8 @@ const router = require('express').Router();
 
 const {
     getProgresses,
-    addProgresses
+    addProgresses,
+    updateCurrentAssignment
 } = require('../controllers/monitor_controller');
 
 
@@ -11,5 +12,8 @@ router.route('/monitor/progresses/:batch')
 
 router.route('/monitor/progresses')
     .post(addProgresses);
+
+router.route('/monitor/current_assignment')
+    .put(updateCurrentAssignment)
 
 module.exports = router;
