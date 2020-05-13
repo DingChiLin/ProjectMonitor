@@ -8,7 +8,6 @@ async function validate(part, server) {
     console.log(`validate part: ${part} server: ${server}`)
     const validator = validators[part-1];
     const result = await validator(server);
-    console.log(result);
     return result;
 }
 
@@ -53,9 +52,11 @@ const validatePart4 = async (server) => {
     }
 
     async function validatePaging(type) {
-        res = {body:{next_paging: 1}}; // dummy response
+        let res = {body:{next_paging: 1}}; // dummy response
+        let counter = 0
         while(res.body.next_paging != undefined) {
-            api = `/api/1.0/products/${type}?paging=${res.body.next_paging}`
+            const current_paging = res.body.next_paging;
+            const api = `/api/1.0/products/${type}?paging=${res.body.next_paging}`
             console.log(api)
             let productNextPageUri = server + api;
             res = await rp({
@@ -64,11 +65,19 @@ const validatePart4 = async (server) => {
                 resolveWithFullResponse: true,
                 json: true
             });
+            const new_paging = res.body.next_paging;
+            if (new_paging == current_paging) {
+                throw Error(`{uri: ${productNextPageUri}, error: next_paging number is the same as the previous page}`)
+            }
             const category = type == 'all' ? null : type;
             try {
                 validProductsResponse(res, category);
             } catch (e) {
                 throw Error(`{uri: ${productNextPageUri}, error: ${e.message}}`)
+            }
+            counter += 1
+            if (counter > 30) {
+                throw Error(`{uri: ${productNextPageUri}, error: get too many pages (> 30)}`)
             }
         }
     }
@@ -206,6 +215,7 @@ const validatePart7 = async (server) => {
     }
 }
 
+// generate FB token: https://developers.facebook.com/tools/explorer/
 const validatePart8 = async (server) => {
     try {
         const accessToken = await validateSignIn({

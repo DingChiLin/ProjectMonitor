@@ -41,9 +41,17 @@ const getAssignmentById = async (id) => {
 }
 
 const createProgress = async (progress) => {
-    const progresses = await knex('progresses')
-        .insert(progress);
-
+    const progresses = await knex.raw(
+        `INSERT INTO progresses (student_id, assignment_id, pr_link, status_id) VALUES (?)
+         ON DUPLICATE KEY UPDATE
+         pr_link = ?, status_id = ?
+        `,
+        [
+            Object.values(progress),
+            progress.pr_link,
+            progress.status_id
+        ]
+    )
     return progresses;
 }
 
