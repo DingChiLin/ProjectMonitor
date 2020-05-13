@@ -51,7 +51,7 @@ const students = [
     },
     {
         batch: 11,
-        name: 'pual',
+        name: 'paul',
         github_name: 'dadamu',
         email: 'p22626262@gmail.com',
         github_link: 'https://github.com/dadamu',
