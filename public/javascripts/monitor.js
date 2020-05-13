@@ -159,7 +159,7 @@ const Monitor = {
 
         for (let student of this.students) {
             let tableRow = document.createElement('tr');
-            tableRow.setAttribute('width', '20%');
+            tableRow.setAttribute('height', '70px');
 
             let latestAssignmentId;
             if (this.progressesMap[student.id]) {
