@@ -23,7 +23,7 @@ const students = [
         github_name: 'violachyu',
         email: 'pinckychyu@gmail.com',
         github_link: 'https://github.com/violachyu',
-        server: '',
+        server: 'http://3.23.162.33',
     },
     {
         batch: 11,
@@ -31,7 +31,7 @@ const students = [
         github_name: 'Loooffy',
         email: 'loooffy@gmail.com',
         github_link: 'https://github.com/Loooffy',
-        server: '',
+        server: 'http://3.22.161.204',
     },
     {
         batch: 11,
@@ -39,7 +39,7 @@ const students = [
         github_name: 'sandiwu0318',
         email: 'sandiwu0318@gmail.com',
         github_link: 'https://github.com/sandiwu0318',
-        server: '',
+        server: 'http://18.190.138.62',
     },
     {
         batch: 11,
@@ -47,7 +47,7 @@ const students = [
         github_name: 'yuanchris',
         email: 'yuanchris1@gmail.com',
         github_link: 'https://github.com/yuanchris',
-        server: '',
+        server: 'http://18.182.189.165',
     },
     {
         batch: 11,
@@ -55,7 +55,7 @@ const students = [
         github_name: 'dadamu',
         email: 'p22626262@gmail.com',
         github_link: 'https://github.com/dadamu',
-        server: '',
+        server: 'http://52.13.10.23',
     },
     {
         batch: 11,
@@ -63,7 +63,7 @@ const students = [
         github_name: 'TimMKChang',
         email: 'b00501007@gmail.com',
         github_link: 'https://github.com/TimMKChang',
-        server: '',
+        server: 'http://3.23.160.143',
     },
     {
         batch: 11,
@@ -71,7 +71,7 @@ const students = [
         github_name: 'white-100',
         email: 't100210022002@gmail.com',
         github_link: 'https://github.com/white-100',
-        server: '',
+        server: 'http://3.22.3.108',
     },
     {
         batch: 11,
@@ -79,7 +79,7 @@ const students = [
         github_name: 'Hsieh-Huai-Wei',
         email: 'waterman0116@gmail.com',
         github_link: 'https://github.com/Hsieh-Huai-Wei',
-        server: '',
+        server: 'http://3.22.212.77',
     },
     {
         batch: 11,
@@ -87,7 +87,7 @@ const students = [
         github_name: 'JohnC-92',
         email: 'chongxz@solab.me.ntu.edu.tw',
         github_link: 'https://github.com/JohnC-92',
-        server: '',
+        server: 'http://15.165.60.213',
     },
     {
         batch: 11,
@@ -95,7 +95,7 @@ const students = [
         github_name: 'Inchtw',
         email: 'ashin1207@gmail.com',
         github_link: 'https://github.com/Inchtw',
-        server: '',
+        server: 'http://13.251.148.0',
     },
     {
         batch: 11,
@@ -103,7 +103,7 @@ const students = [
         github_name: 'yk9331',
         email: 'yenchenkuo9331@gmail.com',
         github_link: 'https://github.com/yk9331',
-        server: '',
+        server: 'http://3.13.102.220',
     },
     {
         batch: 11,
@@ -111,7 +111,7 @@ const students = [
         github_name: 'tanyachuang94',
         email: 'yoshikachuang@gmail.com',
         github_link: 'https://github.com/tanyachuang94',
-        server: '',
+        server: 'http://54.168.9.223',
     },
     {
         batch: 11,
@@ -119,7 +119,7 @@ const students = [
         github_name: 'jtjin',
         email: 'wade4515x@gmail.com',
         github_link: 'https://github.com/jtjin',
-        server: '',
+        server: 'http://3.136.3.90',
     },
 ];
 
