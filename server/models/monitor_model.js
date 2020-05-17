@@ -5,6 +5,12 @@ const getStudents = async (batch) => {
     const students = await knex('students')
         .where("batch", batch);
 
+    //TODO: can remove github_link
+    students.map(s => {
+        s.github_link = `https://github.com/${s.github_name}/Backend-Class-Batch${batch}`;
+        return s;
+    })
+
     return students;
 }
 

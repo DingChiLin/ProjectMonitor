@@ -15,7 +15,8 @@ const Monitor = {
         this.batchId = batchId
         await this.getLatestProgress(batchId);
 
-        $("#current_assignment_btn").click(function() {
+        $("#current_assignment_btn").click(async function() {
+            await self.getLatestProgress(self.batchId);
             for (student of self.students) {
                 self.changeCurrentAssignment(student.id, self.currentAssignmentId);
             }
@@ -75,7 +76,7 @@ const Monitor = {
         this.updateStatus(statusDOM, studentId, assignmentId);
     },
 
-    addAssignmentSelector: function(assignmentSelector, latestAssignmentId) {
+    addAssignmentSelector: function(assignmentSelector, assignmentId) {
         assignmentSelector.options.length = 0;
         for(assignment of this.assignments) {
             const option = document.createElement('option');
@@ -83,8 +84,8 @@ const Monitor = {
             option.textContent = assignment.name;
             assignmentSelector.append(option);
         }
-        if (latestAssignmentId) {
-            assignmentSelector.value = latestAssignmentId;
+        if (assignmentId) {
+            assignmentSelector.value = assignmentId;
         }
     },
     
@@ -160,11 +161,6 @@ const Monitor = {
         for (let student of this.students) {
             let tableRow = document.createElement('tr');
             tableRow.setAttribute('height', '70px');
-
-            let latestAssignmentId;
-            if (this.progressesMap[student.id]) {
-                latestAssignmentId = Array.from(this.progressesMap[student.id].keys()).pop();
-            }
             for (let col of Object.keys(this.columns)) {
                 let tableData = document.createElement('td');
 
@@ -193,7 +189,7 @@ const Monitor = {
                             this.changeCurrentAssignment(studentId, assignmentId)
                         })
 
-                        this.addAssignmentSelector(partSelector, latestAssignmentId);
+                        this.addAssignmentSelector(partSelector, this.currentAssignmentId);
                         tableData.appendChild(partSelector);
                         break;
                     case 'pr':
@@ -203,7 +199,7 @@ const Monitor = {
                         prLinkDOM.setAttribute('id', `pr_link_${student.id}`);
                         tableData.appendChild(prLinkDOM);
 
-                        this.updatePRLink(prLinkDOM, student.id, latestAssignmentId);
+                        this.updatePRLink(prLinkDOM, student.id, this.currentAssignmentId);
                         break;
                     case 'page':
                         const pageLinkDOM = document.createElement('a');
@@ -212,14 +208,14 @@ const Monitor = {
                         pageLinkDOM.setAttribute('id', `page_link_${student.id}`);
                         tableData.appendChild(pageLinkDOM);
 
-                        this.updatePageLink(pageLinkDOM, student.id, latestAssignmentId);
+                        this.updatePageLink(pageLinkDOM, student.id, this.currentAssignmentId);
                         break;
                     case 'status':
                         const statusDOM = document.createElement('p');
                         statusDOM.setAttribute('id', `status_${student.id}`);
                         tableData.appendChild(statusDOM);
 
-                        this.updateStatus(statusDOM, student.id, latestAssignmentId);
+                        this.updateStatus(statusDOM, student.id, this.currentAssignmentId);
                         break;
                     default:
                         tableData.textContent = "";
