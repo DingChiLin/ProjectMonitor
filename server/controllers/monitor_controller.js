@@ -72,7 +72,7 @@ const addProgresses = async (req, res) => {
     try {
         if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.COMMENT) {
             validResult = await Validator.validate(data.assignment.part, data.student.server);
-            console.log(validResult);
+            console.log("validResult:", validResult);
         }
     } catch (e) {
         console.log('validate failed,:', e.message);
