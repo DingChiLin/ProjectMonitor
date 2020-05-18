@@ -34,14 +34,14 @@ const validatePart4 = async (server) => {
         const api = `/api/1.0/products/${type}`;
         console.log(api)
         const productUri = server + api;
-        const res = await rp({
-            method: 'GET',
-            uri: productUri,
-            resolveWithFullResponse: true,
-            json: true
-        });
-        const category = type == 'all' ? null : type;
         try {
+            const res = await rp({
+                method: 'GET',
+                uri: productUri,
+                resolveWithFullResponse: true,
+                json: true
+            });
+            const category = type == 'all' ? null : type;
             validProductsResponse(res, category);
             if ((type == 'all' || type == 'women') && !res.body.next_paging) {
                 throw Error('response missing key: next_paging')
@@ -59,18 +59,18 @@ const validatePart4 = async (server) => {
             const api = `/api/1.0/products/${type}?paging=${res.body.next_paging}`
             console.log(api)
             let productNextPageUri = server + api;
-            res = await rp({
-                method: 'GET',
-                uri: productNextPageUri,
-                resolveWithFullResponse: true,
-                json: true
-            });
-            const new_paging = res.body.next_paging;
-            if (new_paging == current_paging) {
-                throw Error(`{uri: ${productNextPageUri}, error: next_paging number is the same as the previous page}`)
-            }
-            const category = type == 'all' ? null : type;
             try {
+                res = await rp({
+                    method: 'GET',
+                    uri: productNextPageUri,
+                    resolveWithFullResponse: true,
+                    json: true
+                });
+                const new_paging = res.body.next_paging;
+                if (new_paging == current_paging) {
+                    throw Error(`{uri: ${productNextPageUri}, error: next_paging number is the same as the previous page}`)
+                }
+                const category = type == 'all' ? null : type;
                 validProductsResponse(res, category);
             } catch (e) {
                 throw Error(`{uri: ${productNextPageUri}, error: ${e.message}}`)
@@ -314,16 +314,7 @@ function validProductsResponse(res, category, keyword) {
         throw Error(`response product missing keys: ${missingKeys}`);
     }
 
-    // 5. products should have correct category
-    if (category) {
-        for (product of res.body.data) {
-            if (product.category != category) {
-                throw Error(`response product show category '${product.category}', but it should be '${category}'`);  
-            }
-        }
-    }
-
-    // 6. product should have correct keyword in title
+    // 5. product should have correct keyword in title
     if (keyword) {
         for (product of res.body.data) {
             if (!product.title.includes(keyword)) {
@@ -494,7 +485,7 @@ const validators = [
 /**
  * For Development
  */
-const part = 12;
+const part = 4;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
 function main(){
