@@ -285,10 +285,16 @@ const validatePart15 = async (server) => {
 }
 
 async function validHtmlPage(uri) {
-    console.log(uri);
-    const res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
-    if (res.statusCode != 200 || !res.body.includes('html')) {
+    console.log("valid page:", uri);
+    let res;
+    try {
+        res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
+    } catch (e) {
         throw Error(`can't access link: ${uri}`);
+    }
+
+    if (res.statusCode != 200 || !res.body.includes('html')) {
+        throw Error(`Get wrong status code or can not find html tag from link: ${uri}`);
     }
 }
 
@@ -393,49 +399,51 @@ function validateUser(user) {
 // sign up
 async function validateSignUp(body) {
     const uri = server + '/api/1.0/user/signup';
-    console.log(uri);
-    let res = await rp({
-        method: 'POST',
-        uri,
-        body,
-        json: true
-    });
-
+    console.log("Sign up from:", uri);
+    let res;
     try {
-        if (!res.data) {
-            throw Error("response json without key: data");
-        }
-
-        validateUserInfo(res.data);
-        validateUser(res.data.user);
+        res = await rp({
+            method: 'POST',
+            uri,
+            body,
+            json: true
+        });
     } catch (e) {
         throw Error(`{uri: ${uri}, error: ${e.message}}`)
     }
+
+    if (!res.data) {
+        throw Error("response json without key: data");
+    }
+
+    validateUserInfo(res.data);
+    validateUser(res.data.user)
 }
 
 // sign in
 async function validateSignIn(body) {
     const uri = server + '/api/1.0/user/signin';
-    console.log(uri);
-    let res = await rp({
-        method: 'POST',
-        uri,
-        body,
-        json: true
-    });
-
+    console.log("Sign in from:", uri);
+    let res;
     try {
-        if (!res.data) {
-            throw Error("response json without key: data");
-        }
-
-        validateUserInfo(res.data);
-        validateUser(res.data.user);
-
-        return res.data.access_token;
+        res = await rp({
+            method: 'POST',
+            uri,
+            body,
+            json: true
+        });
     } catch (e) {
         throw Error(`{uri: ${uri}, error: ${e.message}}`)
     }
+
+    if (!res.data) {
+        throw Error("response json without key: data");
+    }
+
+    validateUserInfo(res.data);
+    validateUser(res.data.user);
+
+    return res.data.access_token;
 }
 
 // user profile
@@ -488,8 +496,8 @@ const validators = [
 const part = 4;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
-function main(){
-    validate(part, server);
+async function main(){
+    console.log(await validate(part, server));
 }
 
 if (require.main === module) {
