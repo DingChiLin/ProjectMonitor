@@ -32,8 +32,8 @@ const validatePart3 = async (server) => {
 const validatePart4 = async (server) => {
     async function validateAPI(type) {
         const api = `/api/1.0/products/${type}`;
-        console.log(api)
         const productUri = server + api;
+        console.log("query from:", productUri);
         try {
             const res = await rp({
                 method: 'GET',
