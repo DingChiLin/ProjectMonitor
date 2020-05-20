@@ -113,13 +113,13 @@ const validatePart5 = async (server) => {
         const api = `/api/1.0/products/search?keyword=${keyword}`;
         const productSearchUri = encodeURI(server + api);
         console.log(productSearchUri);
-        const res = await rp({
-            method: 'GET',
-            uri: productSearchUri,
-            resolveWithFullResponse: true,
-            json: true
-        });
         try {
+            const res = await rp({
+                method: 'GET',
+                uri: productSearchUri,
+                resolveWithFullResponse: true,
+                json: true
+            });
             validProductsResponse(res, null, keyword);
         } catch (e) {
             throw Error(`{uri: ${productSearchUri}, error: ${e.message}}`)
@@ -133,8 +133,8 @@ const validatePart5 = async (server) => {
         for (product of res.data) {
             const productDetailUri = server + `/api/1.0/products/details?id=${product.id}`;
             console.log(productDetailUri);
-            let detailRes = await rp({uri: productDetailUri, json:true});
             try {
+                let detailRes = await rp({uri: productDetailUri, json:true});
                 if (!detailRes.data) {
                     throw Error("response json without key: data");
                 }
@@ -165,15 +165,15 @@ const validatePart6 = async (server) => {
     async function validateCampaignAPI(keyword) {
         const campaignUri = server + '/api/1.0/marketing/campaigns';
         console.log(campaignUri);
-        let campaignRes = await rp({uri: campaignUri, json:true});
         try {
+            let campaignRes = await rp({uri: campaignUri, json:true});
             if (!campaignRes.data) {
                 throw Error("response json without key: data");
             }
 
             // validate campaign
             for (campaign of campaignRes.data) {
-                const expectedCampaignKeys = new Set(["id", "product_id", "picture", "story"]);
+                const expectedCampaignKeys = new Set(["product_id", "picture", "story"]);
                 const campaignKeys = new Set(Object.keys(campaign));
                 const missingCampaignKeys = setDiff(expectedCampaignKeys, campaignKeys)
                 if (missingCampaignKeys.length > 0) {
@@ -216,6 +216,7 @@ const validatePart7 = async (server) => {
 }
 
 // generate FB token: https://developers.facebook.com/tools/explorer/
+// long live token: https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing
 const validatePart8 = async (server) => {
     try {
         const accessToken = await validateSignIn({
@@ -493,7 +494,7 @@ const validators = [
 /**
  * For Development
  */
-const part = 4;
+const part = 7;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
 async function main(){

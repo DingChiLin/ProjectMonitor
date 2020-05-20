@@ -34,19 +34,23 @@ const addProgresses = async (req, res) => {
         return;
     }
 
+    console.log("payload:", payload);
+
     let uri;
     let validateType;
     if (payload.pull_request) {
         if (payload.pull_request.merged_at) {
             validateType = VALIDATE_TYPES.MERGE;
-        } else {
+        } else if (payload.action == 'opened') {
             validateType = VALIDATE_TYPES.PULL_REQUEST;
         }
         uri = payload.pull_request.issue_url + '/comments';
     } else if (payload.comment && payload.comment.body.toLowerCase().trim() == 'fixed') {
         uri = payload.comment.issue_url + '/comments';
         validateType = VALIDATE_TYPES.COMMENT;
-    } else {
+    }
+
+    if (!validateType) {
         console.log("payload without valid type");
         res.send("payload without valid type" );
         return;
