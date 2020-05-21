@@ -169,7 +169,7 @@ async function postComment(uri, content) {
         'User-Agent': 'request',
         Authorization: `token ${GITHUB_TOKEN}`
     }
-    const body = JSON.stringify({"body": content});
+    const body = JSON.stringify({"body": JSON.stringify(content)});
     await rp({method: 'POST', uri, body: body, headers});
 }
 

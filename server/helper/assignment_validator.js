@@ -24,7 +24,7 @@ const validatePart3 = async (server) => {
         await validHtmlPage(server + '/admin/product.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -235,7 +235,7 @@ const validatePart9 = async (server) => {
         await validHtmlPage(server + '/admin/checkout.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -249,7 +249,7 @@ const validatePart11 = async (server) => {
         await validHtmlPage(server + '/index.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -263,7 +263,7 @@ const validatePart12 = async (server) => {
         }
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -273,7 +273,7 @@ const validatePart13 = async (server) => {
         await validHtmlPage(server + '/profile.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     };
 }
 
