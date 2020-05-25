@@ -256,7 +256,12 @@ const validatePart12 = async (server) => {
     try {
         const api = `/api/1.0/products/all`;
         const productAllUri = server + api;
-        const res = await rp({uri: productAllUri, json: true});
+        const res = await rp({
+            uri: productAllUri,
+            json: true,
+            insecure: true,
+            rejectUnauthorized: false
+        });
         for (product of res.data) {
             await validHtmlPage(server + '/product.html?id=' + product.id);
         }
@@ -284,12 +289,23 @@ const validatePart15 = async (server) => {
     return {status:1, message:SUCCESS_MESSAGE};
 }
 
+const validatePart16 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
 async function validHtmlPage(uri) {
     console.log("valid page:", uri);
     let res;
     try {
-        res = await rp({method: 'GET', uri, resolveWithFullResponse: true});
+        res = await rp({
+            method: 'GET',
+            uri,
+            resolveWithFullResponse: true,
+            insecure: true,
+            rejectUnauthorized: false
+        });
     } catch (e) {
+	console.log(e);
         throw Error(`can't access link: ${uri}`);
     }
 
@@ -415,7 +431,9 @@ async function validateSignUp(body) {
             method: 'POST',
             uri,
             body,
-            json: true
+            json: true,
+            insecure: true,
+            rejectUnauthorized: false
         });
     } catch (e) {
         throw Error(`{uri: ${uri}, error: ${e.message}}`)
@@ -439,7 +457,9 @@ async function validateSignIn(body) {
             method: 'POST',
             uri,
             body,
-            json: true
+            json: true,
+            insecure: true,
+            rejectUnauthorized: false
         });
     } catch (e) {
         throw Error(`{uri: ${uri}, error: ${e.message}}`)
@@ -467,7 +487,9 @@ async function validateUserProfile(accessToken) {
         method: 'GET',
         uri,
         headers,
-        json: true
+        json: true,
+        insecure: true,
+        rejectUnauthorized: false
     });
 
     try {
@@ -497,6 +519,7 @@ const validators = [
     validatePart13,
     validatePart14,
     validatePart15,
+    validatePart16
 ]
 
 /**
