@@ -24,7 +24,7 @@ const validatePart3 = async (server) => {
         await validHtmlPage(server + '/admin/product.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -32,16 +32,16 @@ const validatePart3 = async (server) => {
 const validatePart4 = async (server) => {
     async function validateAPI(type) {
         const api = `/api/1.0/products/${type}`;
-        console.log(api)
         const productUri = server + api;
-        const res = await rp({
-            method: 'GET',
-            uri: productUri,
-            resolveWithFullResponse: true,
-            json: true
-        });
-        const category = type == 'all' ? null : type;
+        console.log("query from:", productUri);
         try {
+            const res = await rp({
+                method: 'GET',
+                uri: productUri,
+                resolveWithFullResponse: true,
+                json: true
+            });
+            const category = type == 'all' ? null : type;
             validProductsResponse(res, category);
             if ((type == 'all' || type == 'women') && !res.body.next_paging) {
                 throw Error('response missing key: next_paging')
@@ -59,18 +59,18 @@ const validatePart4 = async (server) => {
             const api = `/api/1.0/products/${type}?paging=${res.body.next_paging}`
             console.log(api)
             let productNextPageUri = server + api;
-            res = await rp({
-                method: 'GET',
-                uri: productNextPageUri,
-                resolveWithFullResponse: true,
-                json: true
-            });
-            const new_paging = res.body.next_paging;
-            if (new_paging == current_paging) {
-                throw Error(`{uri: ${productNextPageUri}, error: next_paging number is the same as the previous page}`)
-            }
-            const category = type == 'all' ? null : type;
             try {
+                res = await rp({
+                    method: 'GET',
+                    uri: productNextPageUri,
+                    resolveWithFullResponse: true,
+                    json: true
+                });
+                const new_paging = res.body.next_paging;
+                if (new_paging == current_paging) {
+                    throw Error(`{uri: ${productNextPageUri}, error: next_paging number is the same as the previous page}`)
+                }
+                const category = type == 'all' ? null : type;
                 validProductsResponse(res, category);
             } catch (e) {
                 throw Error(`{uri: ${productNextPageUri}, error: ${e.message}}`)
@@ -113,13 +113,13 @@ const validatePart5 = async (server) => {
         const api = `/api/1.0/products/search?keyword=${keyword}`;
         const productSearchUri = encodeURI(server + api);
         console.log(productSearchUri);
-        const res = await rp({
-            method: 'GET',
-            uri: productSearchUri,
-            resolveWithFullResponse: true,
-            json: true
-        });
         try {
+            const res = await rp({
+                method: 'GET',
+                uri: productSearchUri,
+                resolveWithFullResponse: true,
+                json: true
+            });
             validProductsResponse(res, null, keyword);
         } catch (e) {
             throw Error(`{uri: ${productSearchUri}, error: ${e.message}}`)
@@ -133,8 +133,8 @@ const validatePart5 = async (server) => {
         for (product of res.data) {
             const productDetailUri = server + `/api/1.0/products/details?id=${product.id}`;
             console.log(productDetailUri);
-            let detailRes = await rp({uri: productDetailUri, json:true});
             try {
+                let detailRes = await rp({uri: productDetailUri, json:true});
                 if (!detailRes.data) {
                     throw Error("response json without key: data");
                 }
@@ -165,15 +165,15 @@ const validatePart6 = async (server) => {
     async function validateCampaignAPI(keyword) {
         const campaignUri = server + '/api/1.0/marketing/campaigns';
         console.log(campaignUri);
-        let campaignRes = await rp({uri: campaignUri, json:true});
         try {
+            let campaignRes = await rp({uri: campaignUri, json:true});
             if (!campaignRes.data) {
                 throw Error("response json without key: data");
             }
 
             // validate campaign
             for (campaign of campaignRes.data) {
-                const expectedCampaignKeys = new Set(["id", "product_id", "picture", "story"]);
+                const expectedCampaignKeys = new Set(["product_id", "picture", "story"]);
                 const campaignKeys = new Set(Object.keys(campaign));
                 const missingCampaignKeys = setDiff(expectedCampaignKeys, campaignKeys)
                 if (missingCampaignKeys.length > 0) {
@@ -216,6 +216,7 @@ const validatePart7 = async (server) => {
 }
 
 // generate FB token: https://developers.facebook.com/tools/explorer/
+// long live token: https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing
 const validatePart8 = async (server) => {
     try {
         const accessToken = await validateSignIn({
@@ -234,7 +235,7 @@ const validatePart9 = async (server) => {
         await validHtmlPage(server + '/admin/checkout.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -248,7 +249,7 @@ const validatePart11 = async (server) => {
         await validHtmlPage(server + '/index.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -267,7 +268,7 @@ const validatePart12 = async (server) => {
         }
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     }
 }
 
@@ -277,7 +278,7 @@ const validatePart13 = async (server) => {
         await validHtmlPage(server + '/profile.html');
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
-        return {status:2, message:{error: e.message}};
+        return {status:2, message:e.message};
     };
 }
 
@@ -336,16 +337,7 @@ function validProductsResponse(res, category, keyword) {
         throw Error(`response product missing keys: ${missingKeys}`);
     }
 
-    // 5. products should have correct category
-    if (category) {
-        for (product of res.body.data) {
-            if (product.category != category) {
-                throw Error(`response product show category '${product.category}', but it should be '${category}'`);  
-            }
-        }
-    }
-
-    // 6. product should have correct keyword in title
+    // 5. product should have correct keyword in title
     if (keyword) {
         for (product of res.body.data) {
             if (!product.title.includes(keyword)) {
@@ -525,7 +517,7 @@ const validators = [
 /**
  * For Development
  */
-const part = 8;
+const part = 7;
 const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
 
 async function main(){
