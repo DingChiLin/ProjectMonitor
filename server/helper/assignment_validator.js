@@ -294,6 +294,16 @@ const validatePart16 = async (server) => {
     return {status:1, message:SUCCESS_MESSAGE};
 }
 
+// midterm
+const validatePart17 = async (server) => {
+    try {
+        await validHtmlPage(server + '/admin/dashboard.html');
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:e.message};
+    };
+}
+
 async function validHtmlPage(uri) {
     console.log("valid page:", uri);
     let res;
@@ -511,7 +521,8 @@ const validators = [
     validatePart13,
     validatePart14,
     validatePart15,
-    validatePart16
+    validatePart16,
+    validatePart17,
 ]
 
 /**
