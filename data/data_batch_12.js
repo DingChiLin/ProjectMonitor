@@ -214,7 +214,20 @@ const assignments = [
         part: 15,
         name: 'week_3_part_2',
         deadline: '2020-10-27',
-    }
+    },
+    {
+        batch: 12,
+        part: 16,
+        name: 'week_3_part_3',
+        deadline: '2020-10-28',
+    },
+    {
+        batch: 12,
+        part: 17,
+        name: 'midterm',
+        route: '/admin/dashboard.html',
+        deadline: '2020-11-20',
+    },
 ]
 
 module.exports = {
