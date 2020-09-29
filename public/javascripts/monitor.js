@@ -25,8 +25,10 @@ const Monitor = {
         $("#latest_progress_btn").click(async function() {
             await self.getLatestProgress(self.batchId);
             for (student of self.students) {
-                latestAssignmentId = Array.from(self.progressesMap[student.id].keys()).pop();
-                self.changeCurrentAssignment(student.id, latestAssignmentId);
+                if(self.progressesMap[student.id]) {
+                    latestAssignmentId = Array.from(self.progressesMap[student.id].keys()).pop();
+                    self.changeCurrentAssignment(student.id, latestAssignmentId);
+                }
             }
         });
     },
@@ -92,7 +94,7 @@ const Monitor = {
     updatePRLink: function(dom, studentId, assignmentId) {
         dom.textContent = "";
         dom.setAttribute('href', "");
-        if(assignmentId) {
+        if(assignmentId && this.progressesMap[studentId]) {
             const progress = this.progressesMap[studentId].get(assignmentId);
             const assignment = this.assignmentMap[assignmentId]
             if (progress && assignment) {
@@ -121,7 +123,7 @@ const Monitor = {
     
     updateStatus: function(dom, studentId, assignmentId) {
         dom.textContent = "";
-        if(assignmentId) {
+        if(assignmentId && this.progressesMap[studentId]) {
             const progress = this.progressesMap[studentId].get(assignmentId);
             if (progress) {
                 const statusId = progress.status_id;
@@ -176,7 +178,7 @@ const Monitor = {
                         githubLinkDOM.textContent = col;
                         githubLinkDOM.setAttribute('target', '_blank');
                         githubLinkDOM.setAttribute('rel', 'noopener noreferrer');
-                        githubLinkDOM.setAttribute('href', student.github_link);
+                        githubLinkDOM.setAttribute('href', `https://github.com/${student.github_name}/Backend-Class-Batch${this.batchId}`);
                         tableData.appendChild(githubLinkDOM);
                         break;
                     case 'part':
@@ -230,7 +232,7 @@ const Monitor = {
 };
 
 async function main() {
-    await Monitor.init(11);
+    await Monitor.init(12);
     Monitor.show();
 }
 

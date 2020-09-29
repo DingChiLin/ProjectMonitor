@@ -1,0 +1,223 @@
+const moment = require('moment');
+
+const students = [
+    {
+        batch: 12,
+        name: 'lindingchi',
+        github_name: 'DingChiLin',
+        email: 'gn01168178@yahoo.com.tw',
+        server: 'http://13.113.12.180',
+    },
+    {
+        batch: 12,
+        name: 'arthur',
+        github_name: 'ArthurLinDev',
+        email: 'lindingchi@gmail.com',
+        server: 'http://13.113.12.180',
+    },
+    {
+        batch: 12,
+        name: 'shelly',
+        github_name: 'shellyYG',
+        email: 'chih-ching.yang@whu.edu',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'po_yu',
+        github_name: 'weairch',
+        email: 'weairch@hotmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'darren',
+        github_name: 'darrenli1256',
+        email: 'occa8520@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'wan_chu',
+        github_name: 'mickeyleetw',
+        email: 'mickeyleetw23@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'ingrid',
+        github_name: 'kuanyinchen',
+        email: 'ingrid831206@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'chia_yi',
+        github_name: 'cyhsieh264',
+        email: 'cyhsieh264@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'nick',
+        github_name: 'ching-hau',
+        email: 'emy33412@yahoo.com.tw',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'sophie',
+        github_name: 'irozora',
+        email: 'moyashi1103@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'jonathan',
+        github_name: 'xrt0231',
+        email: 'ctnw99@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'tiffany',
+        github_name: 'Tiffanymctsou',
+        email: 'tiffany.mctsou@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'erin',
+        github_name: 'yitsuipeng',
+        email: 'yitsuipeng@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'zoe',
+        github_name: 'zoetw88',
+        email: 'zoe7787tw@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'pei_ling',
+        github_name: 'victorwung',
+        email: 'fixedstar1350@gmail.com',
+        server: '',
+    },
+    {
+        batch: 12,
+        name: 'wei_jung',
+        github_name: 'WeiJun0827',
+        email: 'weijunhung@outlook.com',
+        server: '',
+    },
+];
+
+const assignments = [
+    {
+        batch: 12,
+        part: 1,
+        name: 'week_0_part_1',
+        deadline: '2020-10-07',
+    },
+    {
+        batch: 12,
+        part: 2,
+        name: 'week_0_part_2',
+        deadline: '2020-10-08',
+    },
+    {
+        batch: 12,
+        part: 3,
+        name: 'week_0_part_3',
+        route: '/admin/product.html',
+        deadline: '2020-10-09',
+    },
+    {
+        batch: 12,
+        part: 4,
+        name: 'week_1_part_1',
+        route: '/api/1.0/products/all',
+        deadline: '2020-10-12',
+    },
+    {
+        batch: 12,
+        part: 5,
+        name: 'week_1_part_2',
+        route: encodeURI('/api/1.0/products/search?keyword=洋裝'),
+        deadline: '2020-10-13',
+    },
+    {
+        batch: 12,
+        part: 6,
+        name: 'week_1_part_3',
+        route: '/admin/campaign.html',
+        deadline: '2020-10-14',
+    },
+    {
+        batch: 12,
+        part: 7,
+        name: 'week_1_part_4',
+        deadline: '2020-10-15',
+    },
+    {
+        batch: 12,
+        part: 8,
+        name: 'week_1_part_5',
+        deadline: '2020-10-16',
+    },
+    {
+        batch: 12,
+        part: 9,
+        name: 'week_2_part_1',
+        route: '/admin/checkout.html',
+        deadline: '2020-10-19',
+    },
+    {
+        batch: 12,
+        part: 10,
+        name: 'week_2_part_2',
+        route: '/admin/checkout.html',
+        deadline: '2020-10-20',
+    },
+    {
+        batch: 12,
+        part: 11,
+        name: 'week_2_part_3',
+        route: '/index.html',
+        deadline: '2020-10-21',
+    },
+    {
+        batch: 12,
+        part: 12,
+        name: 'week_2_part_4',
+        route: '/product.html?id=1',
+        deadline: '2020-10-22',
+    },
+    {
+        batch: 12,
+        part: 13,
+        name: 'week_2_part_5',
+        route: '/profile.html',
+        deadline: '2020-10-23',
+    },
+    {
+        batch: 12,
+        part: 14,
+        name: 'week_3_part_1',
+        deadline: '2020-10-26',
+    },
+    {
+        batch: 12,
+        part: 15,
+        name: 'week_3_part_2',
+        deadline: '2020-10-27',
+    }
+]
+
+module.exports = {
+    students,
+    assignments
+}

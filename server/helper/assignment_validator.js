@@ -528,8 +528,8 @@ const validators = [
 /**
  * For Development
  */
-const part = 7;
-const server = 'http://13.113.12.180'; //'https://arthurstylish.com'
+const part = 17;
+const server = 'http://arthurstylish.com:12345'
 
 async function main(){
     console.log(await validate(part, server));
