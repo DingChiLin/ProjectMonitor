@@ -1,7 +1,7 @@
 require('dotenv');
 const {assert, requester} = require('./set_up');
 const Monitor = require('../server/models/monitor_model');
-const {pullRequestPayload, commentPayload, mergePayload} = require('./payload');
+const {pullRequestPayload, commentPayload, mergePayload, closePayload} = require('./payload');
 
 describe('monitor', async () => {
     it('get pull request and pass the validation', async () => {
@@ -50,5 +50,19 @@ describe('monitor', async () => {
 
         const progress = await Monitor.getProgressByPRLink(mergePayload.pull_request.html_url);
         assert.equal(progress.status_id, 3);
+    }).timeout(5000);
+
+    it('get close', async () => {
+        const data = closePayload;
+
+        const res = await requester
+            .post('/api/1.0/monitor/progresses')
+            .send(data);
+
+        console.log(res.body.data);
+        assert.equal(res.body.data, "OK");
+
+        const progress = await Monitor.getProgressByPRLink(closePayload.pull_request.html_url);
+        assert.isUndefined(progress);
     }).timeout(5000);
 })

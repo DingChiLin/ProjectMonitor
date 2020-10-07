@@ -61,6 +61,12 @@ const updateProgress = async (id, update) => {
         .update(update);
 }
 
+const deleteProgress = async (id) => {
+    await knex('progresses')
+        .where('id', id)
+        .del();
+}
+
 const getProgresses = async (studentIds) => {
     const progresses = await knex('progresses')
         .whereIn("student_id", studentIds)
@@ -89,6 +95,7 @@ module.exports = {
     getAssignmentById,
     createProgress,
     updateProgress,
+    deleteProgress,
     getProgresses,
     getProgressByPRLink,
     getStatus

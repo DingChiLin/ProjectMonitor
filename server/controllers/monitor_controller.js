@@ -8,6 +8,7 @@ const VALIDATE_TYPES = {
     PULL_REQUEST: 'pull_request',
     COMMENT: 'comment',
     MERGE: 'merge',
+    CLOSED: 'closed',
 }
 
 const getProgresses = async (req, res) => {
@@ -38,7 +39,9 @@ const addProgresses = async (req, res) => {
 
     let uri;
     let validateType;
-    if (payload.pull_request) {
+    if (payload.action == 'closed' && !payload.pull_request.merged_at) {
+        validateType = VALIDATE_TYPES.CLOSED;
+    } else if (payload.pull_request) {
         if (payload.pull_request.merged_at) {
             validateType = VALIDATE_TYPES.MERGE;
         } else if (payload.action == 'opened') {
@@ -96,6 +99,8 @@ const addProgresses = async (req, res) => {
         await Monitor.updateProgress(data.progress.id, {status_id: validResult.status});
     } else if (validateType == VALIDATE_TYPES.MERGE) {
         await Monitor.updateProgress(data.progress.id, {status_id:3, finished_at: new Date(data.mergedAt)});
+    } else if (validateType == VALIDATE_TYPES.CLOSED) {
+        await Monitor.deleteProgress(data.progress.id);
     }
 
     // 4. post result
@@ -108,7 +113,7 @@ const addProgresses = async (req, res) => {
 
 async function parseGithubPayload(payload, validateType) {
     let detail;
-    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.MERGE) {
+    if (validateType == VALIDATE_TYPES.PULL_REQUEST || validateType == VALIDATE_TYPES.MERGE || validateType == VALIDATE_TYPES.CLOSED) {
         detail = payload.pull_request;
         const baseBranch = detail.base.ref.toLowerCase();
         const compareBranch = detail.head.ref.toLowerCase();
@@ -129,7 +134,7 @@ async function parseGithubPayload(payload, validateType) {
         }
 
         // 3. get progress when the type is merge
-        if (validateType == VALIDATE_TYPES.MERGE) {
+        if (validateType == VALIDATE_TYPES.MERGE || validateType == VALIDATE_TYPES.CLOSED) {
             const progress = await Monitor.getProgressByPRLink(detail.prLink);
             detail.progress = progress;
         }
@@ -164,7 +169,7 @@ async function parseGithubPayload(payload, validateType) {
 }
 
 async function postComment(uri, content) {
-    console.log(uri);
+    console.log("post comment to uri:", uri);
     const headers = {
         'User-Agent': 'request',
         Authorization: `token ${GITHUB_TOKEN}`
