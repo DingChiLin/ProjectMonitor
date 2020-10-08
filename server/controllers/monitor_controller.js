@@ -98,9 +98,9 @@ const addProgresses = async (req, res) => {
     } else if (validateType == VALIDATE_TYPES.COMMENT) {
         await Monitor.updateProgress(data.progress.id, {status_id: validResult.status});
     } else if (validateType == VALIDATE_TYPES.MERGE) {
-        await Monitor.updateProgress(data.progress.id, {status_id:3, finished_at: new Date(data.mergedAt)});
+        await Monitor.updateProgress(data.progress.id, {status_id: 3, finished_at: new Date(data.mergedAt)});
     } else if (validateType == VALIDATE_TYPES.CLOSED) {
-        await Monitor.deleteProgress(data.progress.id);
+        await Monitor.updateProgress(data.progress.id, {status_id: 4});
     }
 
     // 4. post result
