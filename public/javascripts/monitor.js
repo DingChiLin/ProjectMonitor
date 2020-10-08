@@ -178,7 +178,7 @@ const Monitor = {
                         githubLinkDOM.textContent = col;
                         githubLinkDOM.setAttribute('target', '_blank');
                         githubLinkDOM.setAttribute('rel', 'noopener noreferrer');
-                        githubLinkDOM.setAttribute('href', `https://github.com/${student.github_name}/Backend-Class-Batch${this.batchId}`);
+                        githubLinkDOM.setAttribute('href', `https://github.com/${student.github_name}/Back-End-Class-Batch${this.batchId}`);
                         tableData.appendChild(githubLinkDOM);
                         break;
                     case 'part':
