@@ -139,6 +139,9 @@ const Monitor = {
                     case 3:
                         dom.setAttribute('style', "color:green;");
                         break;
+                    case 4:
+                        dom.setAttribute('style', "color:gray;");
+                        break;
                 }
             }
         }
