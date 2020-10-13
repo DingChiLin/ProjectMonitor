@@ -320,7 +320,7 @@ async function validHtmlPage(uri) {
         throw Error(`can't access link: ${uri}`);
     }
 
-    if (res.statusCode != 200 || !res.body.includes('html')) {
+    if (res.statusCode != 200) {
         throw Error(`Get wrong status code or can not find html tag from link: ${uri}`);
     }
 }

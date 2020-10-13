@@ -17,6 +17,14 @@ const getStudentByGitHubName = async (batch, githubName) => {
     return students[0];
 }
 
+const getStudentById = async (studentId) => {
+    const students = await knex('students')
+        .where({
+            id: studentId,
+        });
+    return students[0];
+}
+
 const getAssignments = async (batch) => {
     const assignments = await knex('assignments')
         .where("batch", batch);
@@ -89,6 +97,7 @@ const getStatus = async () => {
 
 module.exports = {
     getStudents,
+    getStudentById,
     getStudentByGitHubName,
     getAssignments,
     getAssignmentByName,
