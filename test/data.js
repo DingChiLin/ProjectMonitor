@@ -74,6 +74,9 @@ const status = [
     {
         name: 'passed'
     },
+    {
+        name: 'closed'
+    },
 ]
 
 const progresses = [

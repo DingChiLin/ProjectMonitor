@@ -63,6 +63,6 @@ describe('monitor', async () => {
         assert.equal(res.body.data, "OK");
 
         const progress = await Monitor.getProgressByPRLink(closePayload.pull_request.html_url);
-        assert.isUndefined(progress);
+        assert.equal(progress.status_id, 4);
     }).timeout(5000);
 })
