@@ -151,7 +151,7 @@ async function parseGithubPayload(payload, validateType) {
             throw Error(`{error: comment on a wrong pull request, note: please contact Arthur for this problem}`);
         }
         
-        const student = await Monitor.getStudentById(BATCH, progress.student_id);
+        const student = await Monitor.getStudentById(progress.student_id);
         const assignment = await Monitor.getAssignmentById(progress.assignment_id);
 
         detail.student = student;
