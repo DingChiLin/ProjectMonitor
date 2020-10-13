@@ -65,7 +65,7 @@ const addProgresses = async (req, res) => {
     let data;
     try {
         data = await parseGithubPayload(payload, validateType);
-        console.log('payload data:', data)
+        console.log('payload data:', data);
     } catch (e) {
         await postComment(uri, e.message);
         console.log('parse payload failed:', e.message);
@@ -143,7 +143,6 @@ async function parseGithubPayload(payload, validateType) {
         detail.assignment = assignment;
     } else if (validateType == VALIDATE_TYPES.COMMENT) {
         detail = payload.comment;
-        const student = await Monitor.getStudentByGitHubName(BATCH, detail.user.login);
         detail.prLink = payload.issue.html_url;
         
         // 1. find progress
@@ -152,6 +151,7 @@ async function parseGithubPayload(payload, validateType) {
             throw Error(`{error: comment on a wrong pull request, note: please contact Arthur for this problem}`);
         }
         
+        const student = await Monitor.getStudentById(BATCH, progress.student_id);
         const assignment = await Monitor.getAssignmentById(progress.assignment_id);
 
         detail.student = student;
