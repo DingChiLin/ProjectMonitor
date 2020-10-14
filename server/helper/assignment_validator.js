@@ -217,6 +217,7 @@ const validatePart7 = async (server) => {
 
 // generate FB token: https://developers.facebook.com/tools/explorer/
 // long live token: https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing
+// command: curl -i -X GET "https://graph.facebook.com/v7.0/oauth/access_token?grant_type=fb_exchange_token&client_id=700590737403665&client_secret=c96ee9e4bce99e437de94a9c105386c8&fb_exchange_token={new_tmp_token}"
 const validatePart8 = async (server) => {
     try {
         const accessToken = await validateSignIn({
@@ -528,8 +529,8 @@ const validators = [
 /**
  * For Development
  */
-const part = 17;
-const server = 'http://arthurstylish.com:12345'
+const part = 8;
+const server = 'http://arthurstylish.com'
 
 async function main(){
     console.log(await validate(part, server));
