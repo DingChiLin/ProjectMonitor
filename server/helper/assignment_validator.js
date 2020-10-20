@@ -407,7 +407,7 @@ function setDiff(set1, set2) {
 }
 
 function validateUserInfo(userInfo) {
-    const expectedUserInfoKeys = new Set(["access_token", "access_expired", "login_at", "user"]);
+    const expectedUserInfoKeys = new Set(["access_token", "access_expired", "user"]);
     const userInfoKeys = new Set(Object.keys(userInfo));
     const missingUserInfoKeys = setDiff(expectedUserInfoKeys, userInfoKeys)
     if (missingUserInfoKeys.length > 0) {
