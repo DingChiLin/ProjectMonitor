@@ -198,17 +198,17 @@ const validatePart6 = async (server) => {
 const validatePart7 = async (server) => {
     try {
         const email = "stylishtest_" + crypto.randomBytes(18).toString('hex').substr(0, 8);
-        await validateSignUp({
+        await validateSignUp(server, {
             name: 'stylishtest',
             email: `${email}@test.com`,
             password: 'stylishtest1234'
         });
-        const accessToken = await validateSignIn({
+        const accessToken = await validateSignIn(server, {
             provider: "native",
             email: `${email}@test.com`,     
             password: 'stylishtest1234'
         });
-        await validateUserProfile(accessToken);
+        await validateUserProfile(server, accessToken);
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
         return {status:2, message:e.message};
@@ -220,11 +220,11 @@ const validatePart7 = async (server) => {
 // command: curl -i -X GET "https://graph.facebook.com/v7.0/oauth/access_token?grant_type=fb_exchange_token&client_id=700590737403665&client_secret=c96ee9e4bce99e437de94a9c105386c8&fb_exchange_token={new_tmp_token}"
 const validatePart8 = async (server) => {
     try {
-        const accessToken = await validateSignIn({
+        const accessToken = await validateSignIn(server, {
             provider: "facebook",
             access_token: FACEBOOK_TOKEN
         });
-        await validateUserProfile(accessToken);
+        await validateUserProfile(server, accessToken);
         return {status:1, message:SUCCESS_MESSAGE};
     } catch (e) {
         return {status:2, message:e.message};
@@ -425,7 +425,7 @@ function validateUser(user) {
 }
 
 // sign up
-async function validateSignUp(body) {
+async function validateSignUp(server, body) {
     const uri = server + '/api/1.0/user/signup';
     console.log("Sign up from:", uri);
     let res;
@@ -451,7 +451,7 @@ async function validateSignUp(body) {
 }
 
 // sign in
-async function validateSignIn(body) {
+async function validateSignIn(server, body) {
     const uri = server + '/api/1.0/user/signin';
     console.log("Sign in from:", uri);
     let res;
@@ -479,7 +479,7 @@ async function validateSignIn(body) {
 }
 
 // user profile
-async function validateUserProfile(accessToken) {
+async function validateUserProfile(server, accessToken) {
     const headers = {
         'User-Agent': 'Request-Promise',
         Authorization: `Bearer ${accessToken}`
@@ -530,7 +530,7 @@ const validators = [
  * For Development
  */
 const part = 8;
-const server = 'http://arthurstylish.com'
+const server = 'http://3.138.90.173'
 
 async function main(){
     console.log(await validate(part, server));
