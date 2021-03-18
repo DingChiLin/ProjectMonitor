@@ -1,0 +1,223 @@
+const moment = require('moment');
+const BATCH_ID = 13;
+
+const students = [
+    {
+        batch: BATCH_ID,
+        name: 'lindingchi',
+        github_name: 'DingChiLin',
+        email: 'gn01168178@yahoo.com.tw',
+        server: 'http://13.113.12.180',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'arthur',
+        github_name: 'ArthurLinDev',
+        email: 'lindingchi@gmail.com',
+        server: 'http://13.113.12.180',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'aaron',
+        github_name: 'huichiaotsou',
+        email: 'huichiao.tsou@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'muchi',
+        github_name: 'kuomuchi',
+        email: 'kuokillua1228@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'cheryl',
+        github_name: 'cherylchao6',
+        email: 'nmpyt21@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'lilian',
+        github_name: 'Lilian-yoli',
+        email: 'lilian860919@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'ariel',
+        github_name: 'Arielfang131',
+        email: 'yihua0131@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'hsueh_kuan',
+        github_name: 'Tsai-Hsueh-Kuan',
+        email: 'b123456785678@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'yu_jang',
+        github_name: 'BHDQMO',
+        email: 'huangyujang813@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'andy',
+        github_name: 'twandylue',
+        email: 'protonlue@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'albert',
+        github_name: 'albert811101',
+        email: 'albert_811101@hotmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'james',
+        github_name: 'junhong1923',
+        email: 'm81923@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'henry',
+        github_name: 'JrTai',
+        email: 'photoniclaser@gmail.com',
+        server: '',
+    },
+    {
+        batch: BATCH_ID,
+        name: 'jane',
+        github_name: 'HSIEH-J',
+        email: 'boisw3641@gmail.com',
+        server: '',
+    },
+];
+
+const assignments = [
+    {
+        batch: BATCH_ID,
+        part: 1,
+        name: 'week_0_part_1',
+        deadline: '2021-03-24',
+    },
+    {
+        batch: BATCH_ID,
+        part: 2,
+        name: 'week_0_part_2',
+        deadline: '2021-03-25',
+    },
+    {
+        batch: BATCH_ID,
+        part: 3,
+        name: 'week_0_part_3',
+        route: '/admin/product.html',
+        deadline: '2021-03-26',
+    },
+    {
+        batch: BATCH_ID,
+        part: 4,
+        name: 'week_1_part_1',
+        route: '/api/1.0/products/all',
+        deadline: '2021-03-29',
+    },
+    {
+        batch: BATCH_ID,
+        part: 5,
+        name: 'week_1_part_2',
+        route: encodeURI('/api/1.0/products/search?keyword=洋裝'),
+        deadline: '2021-03-30',
+    },
+    {
+        batch: BATCH_ID,
+        part: 6,
+        name: 'week_1_part_3',
+        route: '/admin/campaign.html',
+        deadline: '2021-03-31',
+    },
+    {
+        batch: BATCH_ID,
+        part: 7,
+        name: 'week_1_part_4',
+        deadline: '2021-04-01',
+    },
+    {
+        batch: BATCH_ID,
+        part: 8,
+        name: 'week_1_part_5',
+        deadline: '2021-04-02',
+    },
+    {
+        batch: BATCH_ID,
+        part: 9,
+        name: 'week_2_part_1',
+        route: '/admin/checkout.html',
+        deadline: '2021-04-05',
+    },
+    {
+        batch: BATCH_ID,
+        part: 10,
+        name: 'week_2_part_2',
+        route: '/admin/checkout.html',
+        deadline: '2021-04-06',
+    },
+    {
+        batch: BATCH_ID,
+        part: 11,
+        name: 'week_2_part_3',
+        route: '/index.html',
+        deadline: '2021-04-07',
+    },
+    {
+        batch: BATCH_ID,
+        part: 12,
+        name: 'week_2_part_4',
+        route: '/product.html?id=1',
+        deadline: '2021-04-08',
+    },
+    {
+        batch: BATCH_ID,
+        part: 13,
+        name: 'week_2_part_5',
+        route: '/profile.html',
+        deadline: '2021-04-09',
+    },
+    {
+        batch: BATCH_ID,
+        part: 14,
+        name: 'week_3_part_1',
+        deadline: '2021-04-12',
+    },
+    {
+        batch: BATCH_ID,
+        part: 15,
+        name: 'week_3_part_2',
+        deadline: '2021-04-13',
+    },
+    {
+        batch: BATCH_ID,
+        part: 16,
+        name: 'week_3_part_3',
+        deadline: '2021-04-14',
+    },
+    {
+        batch: BATCH_ID,
+        part: 17,
+        name: 'midterm',
+        route: '/admin/dashboard.html',
+        deadline: '2020-05-07',
+    },
+]
+
+module.exports = {
+    students,
+    assignments
+}
