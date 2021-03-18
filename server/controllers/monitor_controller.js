@@ -12,7 +12,8 @@ const VALIDATE_TYPES = {
 }
 
 const getProgresses = async (req, res) => {
-    const {batch} = req.params || BATCH;
+    const {batch} = req.params;
+    if (!batch) {batch = BATCH};
 
     const students = await Monitor.getStudents(batch);
     const assignments = await Monitor.getAssignments(batch);
