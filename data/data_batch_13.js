@@ -213,7 +213,7 @@ const assignments = [
         part: 17,
         name: 'midterm',
         route: '/admin/dashboard.html',
-        deadline: '2020-05-07',
+        deadline: '2021-05-07',
     },
 ]
 
