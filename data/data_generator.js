@@ -4,7 +4,7 @@ const knex = require('../server/models/database');
 const {
     students,
     assignments
-} = require('./data_batch_13');
+} = require('./data_batch_13_data_engineering');
 
 async function createFakeData() {
     await knex('students').insert(students);
