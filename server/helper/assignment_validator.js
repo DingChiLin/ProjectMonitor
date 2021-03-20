@@ -158,8 +158,44 @@ const validatePart5 = async (server) => {
     }
 }
 
-// campaign admin page & API
 const validatePart6 = async (server) => {
+    try {
+        const email = "stylishtest_" + crypto.randomBytes(18).toString('hex').substr(0, 8);
+        await validateSignUp(server, {
+            name: 'stylishtest',
+            email: `${email}@test.com`,
+            password: 'stylishtest1234'
+        });
+        const accessToken = await validateSignIn(server, {
+            provider: "native",
+            email: `${email}@test.com`,     
+            password: 'stylishtest1234'
+        });
+        await validateUserProfile(server, accessToken);
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:e.message};
+    }
+}
+
+// generate FB token: https://developers.facebook.com/tools/explorer/
+// long live token: https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing
+// command: curl -i -X GET "https://graph.facebook.com/v7.0/oauth/access_token?grant_type=fb_exchange_token&client_id=700590737403665&client_secret=c96ee9e4bce99e437de94a9c105386c8&fb_exchange_token={new_tmp_token}"
+const validatePart7 = async (server) => {
+    try {
+        const accessToken = await validateSignIn(server, {
+            provider: "facebook",
+            access_token: FACEBOOK_TOKEN
+        });
+        await validateUserProfile(server, accessToken);
+        return {status:1, message:SUCCESS_MESSAGE};
+    } catch (e) {
+        return {status:2, message:e.message};
+    };
+}
+
+// campaign admin page & API
+const validatePart8 = async (server) => {
 
     // campaign API
     async function validateCampaignAPI(keyword) {
@@ -193,42 +229,6 @@ const validatePart6 = async (server) => {
     } catch (e) {
         return {status:2, message:e.message};
     }
-}
-
-const validatePart7 = async (server) => {
-    try {
-        const email = "stylishtest_" + crypto.randomBytes(18).toString('hex').substr(0, 8);
-        await validateSignUp(server, {
-            name: 'stylishtest',
-            email: `${email}@test.com`,
-            password: 'stylishtest1234'
-        });
-        const accessToken = await validateSignIn(server, {
-            provider: "native",
-            email: `${email}@test.com`,     
-            password: 'stylishtest1234'
-        });
-        await validateUserProfile(server, accessToken);
-        return {status:1, message:SUCCESS_MESSAGE};
-    } catch (e) {
-        return {status:2, message:e.message};
-    }
-}
-
-// generate FB token: https://developers.facebook.com/tools/explorer/
-// long live token: https://developers.facebook.com/docs/facebook-login/access-tokens/refreshing
-// command: curl -i -X GET "https://graph.facebook.com/v7.0/oauth/access_token?grant_type=fb_exchange_token&client_id=700590737403665&client_secret=c96ee9e4bce99e437de94a9c105386c8&fb_exchange_token={new_tmp_token}"
-const validatePart8 = async (server) => {
-    try {
-        const accessToken = await validateSignIn(server, {
-            provider: "facebook",
-            access_token: FACEBOOK_TOKEN
-        });
-        await validateUserProfile(server, accessToken);
-        return {status:1, message:SUCCESS_MESSAGE};
-    } catch (e) {
-        return {status:2, message:e.message};
-    };
 }
 
 const validatePart9 = async (server) => {
