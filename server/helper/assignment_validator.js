@@ -416,7 +416,7 @@ function validateUserInfo(userInfo) {
 }
 
 function validateUser(user) {
-    const expectedUserKeys = new Set(["id", "provider", "name", "email", "picture"]);
+    const expectedUserKeys = new Set(["provider", "name", "email", "picture"]);
     const userKeys = new Set(Object.keys(user));
     const missingUserKeys = setDiff(expectedUserKeys, userKeys)
     if (missingUserKeys.length > 0) {
