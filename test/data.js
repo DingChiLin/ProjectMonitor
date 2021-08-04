@@ -8,7 +8,7 @@ const students = [
         github_name: 'DingChiLin',
         email: 'gn01168178@yahoo.com.tw',
         github_link: 'https://github.com/DingChiLin',
-        server: 'http://13.113.12.180',
+        server: 'http://13.230.176.178',
     },
     {
         batch: BATCH,
@@ -16,7 +16,7 @@ const students = [
         github_name: 'ArthurLinDev',
         email: 'lindingchi@gmail.com',
         github_link: 'https://github.com/ArthurLinDev',
-        server: 'http://13.113.12.180',
+        server: 'http://13.230.176.178',
 
     }
 ];
