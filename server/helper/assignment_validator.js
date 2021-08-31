@@ -530,7 +530,7 @@ const validators = [
  * For Development
  */
 const part = 7;
-const server = 'http://13.113.12.180'
+const server = 'http://13.230.176.178'
 
 async function main(){
     console.log(await validate(part, server));
