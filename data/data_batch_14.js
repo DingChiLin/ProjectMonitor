@@ -162,7 +162,6 @@ const assignments = [
         batch: BATCH_ID,
         part: 6,
         name: 'week_1_part_3',
-        route: '/admin/campaign.html',
         deadline: '2021-09-01',
     },
     {
@@ -175,6 +174,7 @@ const assignments = [
         batch: BATCH_ID,
         part: 8,
         name: 'week_1_part_5',
+        route: '/admin/campaign.html',
         deadline: '2021-09-03',
     },
     {
