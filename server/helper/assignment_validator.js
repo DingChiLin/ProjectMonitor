@@ -295,8 +295,20 @@ const validatePart16 = async (server) => {
     return {status:1, message:SUCCESS_MESSAGE};
 }
 
-// midterm
 const validatePart17 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart18 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+const validatePart19 = async (server) => {
+    return {status:1, message:SUCCESS_MESSAGE};
+}
+
+// midterm
+const validatePart20 = async (server) => {
     try {
         await validHtmlPage(server + '/admin/dashboard.html');
         return {status:1, message:SUCCESS_MESSAGE};
@@ -524,6 +536,9 @@ const validators = [
     validatePart15,
     validatePart16,
     validatePart17,
+    validatePart18,
+    validatePart19,
+    validatePart20,
 ]
 
 /**
