@@ -235,7 +235,7 @@ const Monitor = {
 };
 
 async function main() {
-    const BATCH = 14;
+    const BATCH = 16;
     await Monitor.init(BATCH);
     Monitor.show();
 }
