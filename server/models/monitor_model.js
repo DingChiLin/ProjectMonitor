@@ -49,6 +49,7 @@ const getAssignmentById = async (id) => {
 }
 
 const createProgress = async (progress) => {
+    console.log("WRITE PROGRESS TO DB:", progress);
     const progresses = await knex.raw(
         `INSERT INTO progresses (student_id, assignment_id, pr_link, status_id) VALUES (?)
          ON DUPLICATE KEY UPDATE

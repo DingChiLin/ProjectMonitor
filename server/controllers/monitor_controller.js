@@ -88,6 +88,7 @@ const addProgresses = async (req, res) => {
     }
 
     // 3. save change to DB
+    console.log(validateType);
     if (validateType == VALIDATE_TYPES.PULL_REQUEST) {
         const progress = {
             student_id: data.student.id,
