@@ -30,7 +30,7 @@
     "knex": "^0.20.10",
     "lodash": "^4.17.21",
     "minimist": ">=1.2.2",
-    "mocha": "^7.1.1",
+    "mocha": "^10.2.0",
     "moment-timezone": "^0.5.28",
     "mysql": "^2.18.1",
     "nodemon": "^2.0.2",
